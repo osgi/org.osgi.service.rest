@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2014). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
+package org.osgi.impl.service.rest.pojos;
+
+import java.util.ArrayList;
+
 /**
- * Rest Service Package Version 1.0.
+ * List of bundle representation pojos.
  * 
- * @author $Id$
+ * @author Jan S. Rellermeyer, IBM Research
  */
+@SuppressWarnings("serial")
+public final class BundleRepresentationsList extends ArrayList<BundlePojo> {
 
-@Version("1.0.0")
-package org.osgi.service.rest;
+	public BundleRepresentationsList(final org.osgi.framework.Bundle[] bundles) {
+		for (final org.osgi.framework.Bundle bundle : bundles) {
+			add(new BundlePojo(bundle));
+		}
+	}
 
-import org.osgi.annotation.versioning.Version;
-
+}

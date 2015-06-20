@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2014). All Rights Reserved.
- * 
+ * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
+package org.osgi.impl.service.rest.pojos;
+
+import java.util.ArrayList;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
+
 /**
- * Rest Service Package Version 1.0.
+ * List of service pojos.
  * 
- * @author $Id$
+ * @author Jan S. Rellermeyer, IBM Research
  */
+@SuppressWarnings("serial")
+public final class ServicePojoList extends ArrayList<String> {
 
-@Version("1.0.0")
-package org.osgi.service.rest;
+	public ServicePojoList(ServiceReference<?>[] srefs) {
+		for (final ServiceReference<?> sref : srefs) {
+			add("framework/service/" + sref.getProperty(Constants.SERVICE_ID));
+		}
+	}
 
-import org.osgi.annotation.versioning.Version;
-
+}
