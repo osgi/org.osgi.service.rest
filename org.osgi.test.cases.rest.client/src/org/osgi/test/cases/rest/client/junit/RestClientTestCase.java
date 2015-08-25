@@ -6,18 +6,21 @@
  * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
  * Amended and Restated as of May 23, 2011.
  */
-package org.osgi.test.cases.rest.junit;
+package org.osgi.test.cases.rest.client.junit;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -27,34 +30,42 @@ import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.startlevel.dto.BundleStartLevelDTO;
 import org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Namespace;
 import org.osgi.service.rest.client.RestClient;
 import org.osgi.service.rest.client.RestClientFactory;
 
+/**
+ * Tests {@link RestClient} OSGi Service.
+ *
+ * @author Petia Sotirova
+ */
 public class RestClientTestCase extends RestTestUtils {
 
   private ServiceReference<RestClientFactory> restClientFactoryRef;
   private RestClient restClient;
 
   @Override
-  public void setUp() throws Exception {
+  protected void setUp() throws Exception {
     super.setUp();
     restClientFactoryRef = getContext().getServiceReference(RestClientFactory.class);
-    if (restClientFactoryRef == null) {
-      fail("RestClientFactory service is not available!");
-    }
+		assertNotNull("RestClientFactory ServiceReference is not available!", restClientFactoryRef);
     RestClientFactory restClientFactory = getContext().getService(restClientFactoryRef);
+		assertNotNull("RestClientFactory service is not available!", restClientFactory);
     restClient = restClientFactory.createRestClient(new URI(baseURI));
+		assertNotNull("RestClient is not available!", restClient);
   }
 
   @Override
-  public void tearDown() throws Exception {
-    super.tearDown();
+  protected void tearDown() throws Exception {
     if (restClientFactoryRef != null) {
       getContext().ungetService(restClientFactoryRef);
     }
+    super.tearDown();
   }
 
-  // TODO - events
   public void testFrameworkStartLevelRestClient() throws Exception {
     FrameworkStartLevel frameworkStartLevel = getFrameworkStartLevel();
     int originalStartLevel = frameworkStartLevel.getStartLevel();
@@ -67,12 +78,12 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("original initialBundleStartLevel", frameworkStartLevel.getInitialBundleStartLevel(), frameworkStartLevelDTO.initialBundleStartLevel);
 
     FrameworkStartLevelDTO updateFWStartLevelDTO = new FrameworkStartLevelDTO();
-    updateFWStartLevelDTO.startLevel = originalStartLevel /* TODO + 1 */;
+    updateFWStartLevelDTO.startLevel = originalStartLevel;
     updateFWStartLevelDTO.initialBundleStartLevel = originalInitialBundleStartLevel + 1;
 
     getRestClient().setFrameworkStartLevel(updateFWStartLevelDTO);
 
-    frameworkStartLevel = getFrameworkStartLevel();  // TODO Is it necessary
+    frameworkStartLevel = getFrameworkStartLevel();
 
     assertEquals("startLevel after set", updateFWStartLevelDTO.startLevel, frameworkStartLevel.getStartLevel());
     assertEquals("initialBundleStartLevel after set", updateFWStartLevelDTO.initialBundleStartLevel, frameworkStartLevel.getInitialBundleStartLevel());
@@ -82,7 +93,7 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("startLevel", frameworkStartLevel.getStartLevel(), frameworkStartLevelDTO.startLevel);
     assertEquals("initialBundleStartLevel", frameworkStartLevel.getInitialBundleStartLevel(), frameworkStartLevelDTO.initialBundleStartLevel);
 
-    frameworkStartLevel.setStartLevel(originalStartLevel, this);
+		frameworkStartLevel.setStartLevel(originalStartLevel);
     frameworkStartLevel.setInitialBundleStartLevel(originalInitialBundleStartLevel);
 
     frameworkStartLevelDTO = getRestClient().getFrameworkStartLevel();
@@ -98,7 +109,6 @@ public class RestClientTestCase extends RestTestUtils {
     try {
       getRestClient().setFrameworkStartLevel(updateFWStartLevelDTO);
     } catch (Exception cause) {
-      // TODO can we be more specific about what error (or failure) we catch?
       receiveError = true;
     }
     assertTrue("Error for updating framework start level with negative value ", receiveError);
@@ -110,8 +120,6 @@ public class RestClientTestCase extends RestTestUtils {
     Bundle[] bundles = getInstalledBundles();
     assertBundleCollection(bundles, bundleCollection);
 
-    // TODO filter ?
-
     Bundle tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
     if (tb1Bundle != null) { // test bundle is already installed => uninstall
       tb1Bundle.uninstall();
@@ -119,13 +127,13 @@ public class RestClientTestCase extends RestTestUtils {
     String url = getContext().getBundle().getEntry(TB1).toString();
 
     // install bundle with location
-		BundleDTO result = getRestClient().installBundle(url);
+    BundleDTO result = getRestClient().installBundle(url);
     assertNotNull("Bundle location for installed bundle is not null", result);
 
     tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
     assertNotNull("Test bundle TB1 is installed", tb1Bundle);
 
-		assertEquals("Bundle location", getBundleURI(tb1Bundle), getBundleURI(result.id));
+    assertEquals("Bundle location", getBundleURI(tb1Bundle), getBundleURI(result.id));
 
     // same bundle location
     boolean receiveError = false;
@@ -133,8 +141,6 @@ public class RestClientTestCase extends RestTestUtils {
       getRestClient().installBundle(url);
     } catch (Exception cause) {
       receiveError = true;
-
-      // TODO check statis code CLIENT_ERROR_CONFLICT?
     }
     assertTrue("Install bundle by same URI", receiveError);
 
@@ -144,8 +150,6 @@ public class RestClientTestCase extends RestTestUtils {
       getRestClient().installBundle("invalid bundle location");
     } catch (Exception cause) {
       receiveError = true;
-
-      // TODO check statis code SERVER_ERROR_INTERNAL?
     }
     assertTrue("Install bundle by invalid URI", receiveError);
 
@@ -164,7 +168,7 @@ public class RestClientTestCase extends RestTestUtils {
     tb2Bundle = getBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME);
     assertNotNull("Test bundle TB2 is installed", tb2Bundle);
 
-    assertEquals("Bundle location", getBundleURI(tb2Bundle), result);
+	assertEquals("Bundle location", getBundleURI(tb2Bundle), getBundleURI(result.id));
 
     // same bundle location
     receiveError = false;
@@ -218,7 +222,7 @@ public class RestClientTestCase extends RestTestUtils {
     assertBundleRepresentation(bundle, bundleRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
-    bundleRepresentation = getRestClient().getBundle(notExistingBundleId);  // TODO Exception?
+    bundleRepresentation = getRestClient().getBundle(notExistingBundleId);
     assertNull("Bundle representation for not existing bundle " + notExistingBundleId + " :", bundleRepresentation);
 
     // GET by bundle path
@@ -415,7 +419,7 @@ public class RestClientTestCase extends RestTestUtils {
 
   public void testBundleHeaderRestClient() throws Exception {
     Bundle bundle = getRandomBundle();
-		Map<String, String> bHeaders = getRestClient().getBundleHeaders(bundle.getBundleId());
+    Map<String, String> bHeaders = getRestClient().getBundleHeaders(bundle.getBundleId());
     assertBundleHeaderRepresentation(bundle, bHeaders);
 
     bHeaders = getRestClient().getBundleHeaders(getBundlePath(bundle));
@@ -471,7 +475,7 @@ public class RestClientTestCase extends RestTestUtils {
     BundleStartLevelDTO tb1StartLevelDTO = new BundleStartLevelDTO();
     tb1StartLevelDTO.startLevel = tb1NewStartLevel;
 
-		getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
+    getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
 
     tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
     assertEquals("New start level ", tb1NewStartLevel, tb1StartLevel);
@@ -479,7 +483,7 @@ public class RestClientTestCase extends RestTestUtils {
     // set start level by bundle id for non existing bundle id
     receiveError = false;
     try {
-			getRestClient().setBundleStartLevel(notExistingBundleId, tb1StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(notExistingBundleId, tb1StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -489,7 +493,7 @@ public class RestClientTestCase extends RestTestUtils {
     receiveError = false;
     try {
       tb1StartLevelDTO.startLevel = -1;
-			getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(tb1Bundle.getBundleId(), tb1StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -502,14 +506,14 @@ public class RestClientTestCase extends RestTestUtils {
     BundleStartLevelDTO tb2StartLevelDTO = new BundleStartLevelDTO();
     tb2StartLevelDTO.startLevel = tb2NewStartLevel;
 
-		getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
+    getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
     tb2StartLevel = getBundleStartLevel(tb2Bundle).getStartLevel();
     assertEquals("New start level ", tb2NewStartLevel, tb2StartLevel);
 
     // set start level by bundle path for non existing bundle path
     receiveError = false;
     try {
-			getRestClient().setBundleStartLevel(notExistingBundlePath, tb2StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(notExistingBundlePath, tb2StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -519,7 +523,7 @@ public class RestClientTestCase extends RestTestUtils {
     receiveError = false;
     try {
       tb2StartLevelDTO.startLevel = -1;
-			getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
+      getRestClient().setBundleStartLevel(getBundlePath(tb2Bundle), tb2StartLevelDTO.startLevel);
     } catch (Exception cause) {
       receiveError = true;
     }
@@ -601,11 +605,40 @@ public class RestClientTestCase extends RestTestUtils {
     assertTrue("Request with non existing service path " + notExistingSerivePath, receiveError);
   }
 
-  public RestClient getRestClient() {
-    if (restClient == null) {
-      throw new IllegalStateException("RestClient is not available!");
-    }
+	/**
+	 * A basic test that ensures the provider of the RestClientFactory service
+	 * advertises the service capability
+	 * 
+	 * @throws Exception
+	 */
+	public void testServiceCapability() throws Exception {
 
+		List<BundleCapability> capabilities = restClientFactoryRef.getBundle()
+				.adapt(BundleWiring.class)
+				.getCapabilities("osgi.service");
+
+		boolean hasCapability = false;
+		boolean uses = false;
+
+		for (Capability cap : capabilities) {
+			@SuppressWarnings("unchecked")
+			List<String> objectClass = (List<String>) cap.getAttributes().get("objectClass");
+
+			if (objectClass.contains(RestClientFactory.class.getName())) {
+				hasCapability = true;
+				String usesDirective = cap.getDirectives().get(Namespace.CAPABILITY_USES_DIRECTIVE);
+				if (usesDirective != null) {
+					Set<String> packages = new HashSet<String>(Arrays.asList(usesDirective.trim().split("\\s*,\\s*")));
+					uses = packages.contains("org.osgi.service.rest.client");
+				}
+				break;
+			}
+		}
+		assertTrue("No osgi.service capability for the RestClientFactory service", hasCapability);
+		assertTrue("Missing uses constraint on the osgi.service capability", uses);
+	}
+
+  public RestClient getRestClient() {
     return restClient;
   }
 
@@ -644,7 +677,7 @@ public class RestClientTestCase extends RestTestUtils {
 
         assertTrue("Service property " + key, propertiesDTO.containsKey(key));
         if (value instanceof String[]) {
-          assertEquivalent((String[]) value, (String[]) propertiesDTO.get(key));
+          assertEquivalent((String[])value, (String[])propertiesDTO.get(key));
         } else {
           assertEquals("Service property value ", value, propertiesDTO.get(key));
         }
@@ -693,7 +726,7 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("persistentlyStarted:", bundleStartLevel.isPersistentlyStarted(), bundleStartLevelDTO.persistentlyStarted);
   }
 
-	protected void assertBundleHeaderRepresentation(Bundle bundle, Map<String, String> bHeaders) {
+  protected void assertBundleHeaderRepresentation(Bundle bundle, Map<String, String> bHeaders) {
     Dictionary<String, String> headers = bundle.getHeaders();
     if (headers == null) {
       assertNull("Bundle headers" + bundle.getBundleId() + ": ", bHeaders);
@@ -724,7 +757,6 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("state:", bundle.getState(), bundleRepresentation.state);
     assertEquals("symbolicName:", bundle.getSymbolicName(), bundleRepresentation.symbolicName);
     assertEquals("version:", bundle.getVersion().toString(), bundleRepresentation.version);
-    //  location ?
   }
 
   protected void assertEquivalent(final String[] a1, final String[] a2) {

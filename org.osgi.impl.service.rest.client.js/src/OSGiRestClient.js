@@ -26,13 +26,11 @@
  * callbacks that are not declared by the user are substituted with default
  * functions which print to the console.
  * 
- * @author Jan S. Rellermeyer, IBM Research
- * 
  * @param baseUrl
  *            the base URL to the REST API.
  * @returns the OSGi REST API client object
  */
-function OsgiRestClient(baseUrl) {
+function OSGiRestClient(baseUrl) {
 	this.baseUrl = baseUrl || "";
 
 	function checkParam(f) {
@@ -211,31 +209,18 @@ function OsgiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
-	 * @param callbacks
-	 *            an optional object containing callback functions for status
-	 *            updates. On success, the callback will have the updated bundle
-	 *            state object.
-	 */
-	this.startBundle = function startBundle(b, callbacks) {
-		this.setBundleState(b, {
-			state : 32
-		}, callbacks);
-	}
-
-	/**
-	 * Start a bundle.
-	 * 
-	 * @param b
-	 *            the bundle, either the numeric bundle ID or the bundle URI
-	 *            path.
 	 * @param options
-	 *            the options passed to the bundle's start method as an integer.
+	 *            the options passed to the bundle's start method as an integer. (optional)
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
 	 *            updates. On success, the callback will have the updated bundle
 	 *            state object.
 	 */
 	this.startBundle = function startBundle(b, options, callbacks) {
+		if ((isNaN(options - 0))) {
+			callbacks = options
+			options = 0
+		}
 		this.setBundleState(b, {
 			state : 32,
 			options : options
@@ -248,31 +233,18 @@ function OsgiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
-	 * @param callbacks
-	 *            an optional object containing callback functions for status
-	 *            updates. On success, the callback will have the updated bundle
-	 *            state object.
-	 */
-	this.stopBundle = function stopBundle(b, callbacks) {
-		this.setBundleState(b, {
-			state : 4
-		}, callbacks);
-	}
-
-	/**
-	 * Stop a bundle.
-	 * 
-	 * @param b
-	 *            the bundle, either the numeric bundle ID or the bundle URI
-	 *            path. *
 	 * @param options
-	 *            the options passed to the bundle's start method as an integer.
+	 *            the options passed to the bundle's start method as an integer. (optional)
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
 	 *            updates. On success, the callback will have the updated bundle
 	 *            state object.
 	 */
 	this.stopBundle = function stopBundle(b, options, callbacks) {
+		if ((isNaN(options - 0))) {
+			callbacks = options
+			options = 0
+		}
 		this.setBundleState(b, {
 			state : 4,
 			options : options
