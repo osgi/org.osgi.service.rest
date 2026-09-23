@@ -1,0 +1,9 @@
+# Set javac settings from JDT prefs
+
+-privatepackage 				= ${p}.*
+Bundle-Activator: org.osgi.impl.service.rest.client.Activator
+Provide-Capability: osgi.service; \
+  objectClass:List<String>="org.osgi.service.rest.client.RestClientFactory"; \
+  uses:="org.osgi.service.rest.client"
+
+p: org.osgi.impl.service.rest.client
