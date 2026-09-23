@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.osgi</groupId>
+		<artifactId>org.osgi.service.rest.reactor</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<groupId>org.osgi.tck</groupId>
+	<artifactId>org.osgi.tck.service.rest</artifactId>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>org.osgi.test.cases.rest</module>
+		<module>org.osgi.test.cases.rest.client</module>
+		<module>org.osgi.test.cases.rest.client.js</module>
+		<module>org.osgi.impl.service.rest</module>
+		<module>org.osgi.impl.service.rest.client</module>
+		<module>org.osgi.impl.service.rest.client.js</module>
+		<module>org.osgi.test.run.rest</module>
+		<module>org.osgi.test.run.rest.client</module>
+		<module>org.osgi.licensed.org.restlet</module>
+		<module>org.osgi.licensed.org.restlet.ext.json</module>
+		<module>org.osgi.licensed.org.restlet.ext.xml</module>
+		<module>org.osgi.licensed.net.sourceforge.htmlunit</module>
+	</modules>
+
+</project>

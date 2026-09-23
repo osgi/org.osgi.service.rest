@@ -1,0 +1,43 @@
+# Set javac settings from JDT prefs
+
+Bundle-Description = Rest JavaScript Client Service test cases.
+
+-conditionalpackage          = org.osgi.test.support.*
+-privatepackage            =  \
+  ${p}.junit.*
+
+Bundle-Category: osgi,test
+
+Bundle-ClassPath: .,lib/net.sourceforge.htmlunit.jar
+# There are a lot of references in htmlunit, so we need to make them optional
+Import-Package: javax.*;org.apache.*;org.eclipse.jetty.*;org.ietf.*;org.slf4j.*;sun.*;com.jacob.*;resolution:=optional, *
+-includeresource = \
+  lib/net.sourceforge.htmlunit.jar=../../tck/org.osgi.licensed.net.sourceforge.htmlunit/net.sourceforge.htmlunit-2.15.0.jar, \
+  tb1.jar, \
+  tb11.jar, \
+  tb2.jar
+
+
+-fixupmessages.traversing: "While traversing the type tree for"
+
+
+org.osgi.framework.bootdelegation=sun.*,com.sun.*
+#  rest.tck.not_acceptable.check=false,\
+#  rest.tck.validate.xmls=false,\
+#  rest.tck.base.uri="http://localhost:8888,\
+#  rest.tck.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
+
+-fixupmessages.extends: While traversing the type tree while searching EXTENDS
+
+p: org.osgi.test.cases.rest.client.js
+
+# Maven build: workspace includes replaced inline (from cnf/includes and build.bnd in osgi/osgi)
+# -make.maven, not -make: the key is a map entry and would displace
+# a project-level -make (webcontainer also builds .war recipes this
+# way). bnd merges all -make.* entries.
+-make.maven: (*).(jar); type=bnd; recipe="bnd/$1.bnd"
+
+testcases.junit3: ${classes;EXTENDS;junit.framework.TestCase;CONCRETE}
+testcases.junit4: ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
+testcases.junit5: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
+Test-Cases: ${sort;${uniq;${testcases.junit3};${testcases.junit4};${testcases.junit5}}}

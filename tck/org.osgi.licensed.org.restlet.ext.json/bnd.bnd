@@ -1,0 +1,12 @@
+# Third-party bundle without its own source code: the original ships it as
+# a ready-made jar (licensed/repo) that moved into this module via
+# keepPaths/moves. bnd repackages it here unchanged (-includeresource: @jar)
+# into a bundle artifact with an explicit BSN/version, instead of placing
+# the jar into the local repository by hand.
+-includeresource: @org.restlet.ext.json-2.1.7.jar
+-fixupmessages: "Split package*"
+Bundle-SymbolicName: org.restlet.ext.json
+Bundle-Version: 2.1.7.v20140209-2035
+Export-Package: org.restlet.ext.json;uses:="org.restlet.data,org.restlet.resource,org.json,org.restlet.engine.resource,org.restlet.representation,org.restlet.engine.converter"
+Import-Package: org.json;resolution:=optional,org.restlet.data;resolution:=optional,org.restlet.engine.converter;resolution:=optional,org.restlet.engine.resource;resolution:=optional,org.restlet.representation;resolution:=optional,org.restlet.resource;resolution:=optional
+-noextraheaders: true
