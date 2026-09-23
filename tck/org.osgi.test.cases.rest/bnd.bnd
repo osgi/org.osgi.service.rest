@@ -1,5 +1,4 @@
 # Set javac settings from JDT prefs
--include: ${includes}/jdt.bnd, ${includes}/osgi.tck.junit-platform.bnd, ${includes}/tck.bnd, ${includes}/cmpn.bnd
 
 Bundle-Description = Rest Service test cases.
 
@@ -12,7 +11,7 @@ Import-Package: ${-signaturetest}, *
 Bundle-Category: osgi,test
 
 -includeresource = \
-  ${replace;${p};\\.;/}/junit/schema-rest.xsd=${project.workspace}/xmlns/rest/v1.0.0/rest.xsd, \
+  ${replace;${p};\\.;/}/junit/schema-rest.xsd=../../xmlns/rest/v1.0.0/rest.xsd, \
   tb1.jar, \
   tb11.jar, \
   tb2.jar, \
@@ -24,22 +23,23 @@ Bundle-Category: osgi,test
 
 -signaturetest          = org.osgi.service.rest
 
--buildpath = \
-    org.osgi.test.support;version=project,\
-    org.osgi.framework;maven-scope=provided;version=1.8, \
-    org.osgi.service.startlevel;maven-scope=provided;version=1.0, \
-    org.osgi.service.rest;version=latest,\
-    org.osgi.impl.service.rest.support; version=latest
 
--runbundles = \
-    org.osgi.service.rest;version=latest,\
-    org.osgi.impl.service.rest; version=latest, \
-    org.osgi.impl.service.rest.support; version=latest
 
 org.osgi.framework.bootdelegation=sun.*,com.sun.*
--runproperties = ${runproperties}, \
-    rest.tck.base.uri="http://localhost:8888/",\
-    rest.tck.debug=false
 #  rest.tck.not_acceptable.check=false,\
 #  rest.tck.validate.xmls=false,\
 #  rest.tck.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
+
+p: org.osgi.test.cases.rest
+
+# Maven build: workspace includes replaced inline (from cnf/includes and build.bnd in osgi/osgi)
+# -make.maven, not -make: the key is a map entry and would displace
+# a project-level -make (webcontainer also builds .war recipes this
+# way). bnd merges all -make.* entries.
+-make.maven: (*).(jar); type=bnd; recipe="bnd/$1.bnd"
+
+testcases.junit3: ${classes;EXTENDS;junit.framework.TestCase;CONCRETE}
+testcases.junit4: ${classes;HIERARCHY_ANNOTATED;org.junit.Test;CONCRETE}
+testcases.junit5: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
+Test-Cases: ${sort;${uniq;${testcases.junit3};${testcases.junit4};${testcases.junit5}}}
+-plugin.signaturetest: SignatureTest
