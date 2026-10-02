@@ -1,0 +1,3 @@
+org.osgi.impl.service.rest
+org.osgi.impl.service.rest.pojos
+org.osgi.impl.service.rest.resources

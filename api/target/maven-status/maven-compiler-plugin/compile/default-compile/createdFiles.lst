@@ -1,0 +1,5 @@
+org/osgi/service/rest/client/RestClient.class
+org/osgi/service/rest/client/RestClientFactory.class
+org/osgi/service/rest/package-info.class
+org/osgi/service/rest/client/package-info.class
+org/osgi/service/rest/RestApiExtension.class

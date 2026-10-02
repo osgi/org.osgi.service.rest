@@ -1,0 +1,98 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xreflabel="org.osgi.service.rest"
+         version="5"
+         role="package"
+         xml:id="org.osgi.service.rest">
+   <title>org.osgi.service.rest</title>
+   <info>
+      <releaseinfo xml:id="org.osgi.service.rest-version">Version 1.0</releaseinfo>
+      <edition xml:id="org.osgi.service.rest-version.number">1.0</edition>
+   </info>
+   <para>
+Rest Service Package Version 1.0.
+   </para>
+   <section role="summary">
+      <title>Summary</title>
+      <itemizedlist>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.rest.RestApiExtension">
+                  <code>RestApiExtension</code>
+               </link> - 
+Marker interface for registering extensions to the Rest API service.
+   </para>
+         </listitem>
+      </itemizedlist>
+   </section>
+   <section xreflabel="RestApiExtension"
+            role="class"
+            xml:id="org.osgi.service.rest.RestApiExtension">
+      <title>public abstract RestApiExtension</title>
+      <para>
+Marker interface for registering extensions to the Rest API service.
+ 
+ </para>
+      <para>
+ The REST service provides a RESTful interface to clients that need to manage
+ an OSGi framework through a network connection. Other components running
+ on the same framework can contribute their own specific REST
+ interface and make it available and discoverable by registering this marker
+ service using the Whiteboard pattern.
+ </para>
+      <para>
+ Integration of third-party REST interfaces with the framework REST service on
+ the implementation level might not always be possible since it requires
+ knowledge about the underlying implementation and an extension mechanism on
+ that level. Specific technologies such as servlets might support
+ this but the REST service could as well be implemented without the use of a
+ supporting abstraction layer and not offer extensibility.
+ </para>
+      <para>
+ Using this marker service, the REST service includes the advertised service
+ in the Extensions Resource, allowing clients to discover it and 
+ use the extension's functionality.
+ </para>
+      <section xreflabel="NAME"
+               role="field"
+               xml:id="org.osgi.service.rest.RestApiExtension.NAME">
+         <title>public static final String NAME = "org.osgi.rest.name"</title>
+         <para>
+This service property describes the package name of the technology 
+ manageable by this REST API extension. Services specified in OSGi
+ specifications must use their canonical package name as the name.
+ Third-party technologies should also use their package names. The type of this
+ property is <code>java.lang.String</code> and the property is mandatory.
+   </para>
+      </section>
+      <section xreflabel="SERVICE"
+               role="field"
+               xml:id="org.osgi.service.rest.RestApiExtension.SERVICE">
+         <title>public static final String SERVICE = "org.osgi.rest.service"</title>
+         <para>
+This service property refers to the id of the service the REST API
+ extension provides management capabilities for. This can be useful if more
+ than one service of a given type is present in the framework. For example
+ if more than one Http Service is available this property is used to 
+ associate a REST extension managing the Http Service with a specific 
+ service instance.
+ The type of the property is
+ <code>java.lang.Long</code> and the property is optional; if the REST
+ extension is not directly associated with a service in the service 
+ registry, the property should not be set.
+   </para>
+      </section>
+      <section xreflabel="URI_PATH"
+               role="field"
+               xml:id="org.osgi.service.rest.RestApiExtension.URI_PATH">
+         <title>public static final String URI_PATH = "org.osgi.rest.uri.path"</title>
+         <para>
+This service property describes a URI to the REST extension on this local
+ machine. It is either an fully qualified URI with a different port if no
+ integration with the framework REST service is possible or a relative URI
+ implicitly using the same port if integration is possible. 
+ The type of this property is
+ <code>java.lang.String</code> and the property is mandatory.
+   </para>
+      </section>
+   </section>
+</section>

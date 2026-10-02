@@ -1,0 +1,839 @@
+<?xml version='1.0' encoding='utf-8'?>
+<top>
+  <package name='org.osgi.service.rest' fqn='org.osgi.service.rest' qn='org.osgi.service.rest'>
+<org.osgi.annotation.versioning.Version><value>1.0</value>
+</org.osgi.annotation.versioning.Version>
+   <lead>
+Rest Service Package Version 1.0.
+   </lead>
+   <description>
+Rest Service Package Version 1.0.
+   </description>
+<author>@author $Id: 83fecbae4adf5e276ba9c2c62cfadc8b1fdea27d $</author>
+  <class name='RestApiExtension' fqn='org.osgi.service.rest.RestApiExtension' qn='RestApiExtension' package='org.osgi.service.rest' typeParam='' modifiers='public abstract' interface='yes' kind='INTERFACE'>
+   <lead>
+Marker interface for registering extensions to the Rest API service.
+   </lead>
+   <description>
+Marker interface for registering extensions to the Rest API service.
+ 
+ <p>
+ The REST service provides a RESTful interface to clients that need to manage
+ an OSGi framework through a network connection. Other components running
+ on the same framework can contribute their own specific REST
+ interface and make it available and discoverable by registering this marker
+ service using the Whiteboard pattern.
+ </p>
+ <p>
+ Integration of third-party REST interfaces with the framework REST service on
+ the implementation level might not always be possible since it requires
+ knowledge about the underlying implementation and an extension mechanism on
+ that level. Specific technologies such as servlets might support
+ this but the REST service could as well be implemented without the use of a
+ supporting abstraction layer and not offer extensibility.
+ </p>
+ <p>
+ Using this marker service, the REST service includes the advertised service
+ in the Extensions Resource, allowing clients to discover it and 
+ use the extension's functionality.
+ </p>
+   </description>
+<author>@author $Id: 0c403bce370d41e9c2709fb373adee8273c59d1b $</author>
+    <field name='URI_PATH' fqn='org.osgi.service.rest.RestApiExtension.URI_PATH' qn='RestApiExtension.URI_PATH' package='org.osgi.service.rest' modifiers='public static final' typeName='String' qualifiedTypeName='java.lang.String' dimension='' constantValue='"org.osgi.rest.uri.path"'>
+   <lead>
+This service property describes a URI to the REST extension on this local
+ machine.
+   </lead>
+   <description>
+This service property describes a URI to the REST extension on this local
+ machine. It is either an fully qualified URI with a different port if no
+ integration with the framework REST service is possible or a relative URI
+ implicitly using the same port if integration is possible. 
+ The type of this property is
+ <code>java.lang.String</code> and the property is mandatory.
+   </description>
+
+     </field>
+    <field name='NAME' fqn='org.osgi.service.rest.RestApiExtension.NAME' qn='RestApiExtension.NAME' package='org.osgi.service.rest' modifiers='public static final' typeName='String' qualifiedTypeName='java.lang.String' dimension='' constantValue='"org.osgi.rest.name"'>
+   <lead>
+This service property describes the package name of the technology 
+ manageable by this REST API extension.
+   </lead>
+   <description>
+This service property describes the package name of the technology 
+ manageable by this REST API extension. Services specified in OSGi
+ specifications must use their canonical package name as the name.
+ Third-party technologies should also use their package names. The type of this
+ property is <code>java.lang.String</code> and the property is mandatory.
+   </description>
+
+     </field>
+    <field name='SERVICE' fqn='org.osgi.service.rest.RestApiExtension.SERVICE' qn='RestApiExtension.SERVICE' package='org.osgi.service.rest' modifiers='public static final' typeName='String' qualifiedTypeName='java.lang.String' dimension='' constantValue='"org.osgi.rest.service"'>
+   <lead>
+This service property refers to the id of the service the REST API
+ extension provides management capabilities for.
+   </lead>
+   <description>
+This service property refers to the id of the service the REST API
+ extension provides management capabilities for. This can be useful if more
+ than one service of a given type is present in the framework. For example
+ if more than one Http Service is available this property is used to 
+ associate a REST extension managing the Http Service with a specific 
+ service instance.
+ The type of the property is
+ <code>java.lang.Long</code> and the property is optional; if the REST
+ extension is not directly associated with a service in the service 
+ registry, the property should not be set.
+   </description>
+
+     </field>
+  </class>
+  </package>
+  <package name='org.osgi.service.rest.client' fqn='org.osgi.service.rest.client' qn='org.osgi.service.rest.client'>
+<org.osgi.annotation.versioning.Version><value>1.0</value>
+</org.osgi.annotation.versioning.Version>
+   <lead>
+Rest Service Client Package Version 1.0.
+   </lead>
+   <description>
+Rest Service Client Package Version 1.0.
+   </description>
+<author>@author $Id: e81559a844b9b7839fc68b41969145697c146db4 $</author>
+  <class name='RestClient' fqn='org.osgi.service.rest.client.RestClient' qn='RestClient' package='org.osgi.service.rest.client' typeParam='' modifiers='public abstract' interface='yes' kind='INTERFACE'>
+<org.osgi.annotation.versioning.ProviderType></org.osgi.annotation.versioning.ProviderType>
+   <lead>
+A Java client API for a REST service endpoint.
+   </lead>
+   <description>
+A Java client API for a REST service endpoint.
+ 
+ <p>
+ Provides a Java client API for accessing and managing a remote OSGi framework
+ through the REST API. Implementations of this interface will usually take the
+ URL to the remote REST Management Service instance as an argument in their
+ constructor. Further arguments might be needed, for example, if the cloud
+ provider requires URL signing.</p>
+   </description>
+<author>@author $Id: 2d477d682dc895fbf76726d67c9ff8e82233e820 $</author>
+    <method name='getFrameworkStartLevel' fqn='org.osgi.service.rest.client.RestClient.getFrameworkStartLevel' qn='RestClient.getFrameworkStartLevel()' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='FrameworkStartLevelDTO' qualifiedTypeName='org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO' typeArgs='' dimension='' signature='()' flatSignature='()'>
+   <lead>
+Retrieves the current framework start level.
+   </lead>
+   <description>
+Retrieves the current framework start level.
+   </description>
+
+
+<return>Returns the current framework start level in the form of a
+         {@link FrameworkStartLevelDTO}.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='setFrameworkStartLevel' fqn='org.osgi.service.rest.client.RestClient.setFrameworkStartLevel' qn='RestClient.setFrameworkStartLevel(FrameworkStartLevelDTO)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO)' flatSignature='(FrameworkStartLevelDTO)'>
+   <lead>
+Sets the current framework start level.
+   </lead>
+   <description>
+Sets the current framework start level.
+   </description>
+
+<param name='startLevel'>set the framework start level to this target.</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='startLevel' dimension='' typeName='FrameworkStartLevelDTO' fqn='org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundlePaths' fqn='org.osgi.service.rest.client.RestClient.getBundlePaths' qn='RestClient.getBundlePaths()' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Collection&lt;String&gt;' qualifiedTypeName='java.util.Collection' typeArgs='' dimension='' signature='()' flatSignature='()'>
+   <lead>
+Get the bundles currently installed on the managed framework.
+   </lead>
+   <description>
+Get the bundles currently installed on the managed framework.
+   </description>
+
+
+<return>Returns a collection of the bundle URIs in the form of Strings.
+         The URIs are relative to the REST API root URL and can be used to
+         retrieve bundle representations.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundles' fqn='org.osgi.service.rest.client.RestClient.getBundles' qn='RestClient.getBundles()' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Collection&lt;BundleDTO&gt;' qualifiedTypeName='java.util.Collection' typeArgs='' dimension='' signature='()' flatSignature='()'>
+   <lead>
+Get the bundle representations for all bundles currently installed in the
+ managed framework.
+   </lead>
+   <description>
+Get the bundle representations for all bundles currently installed in the
+ managed framework.
+   </description>
+
+
+<return>Returns a collection of BundleDTO objects.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundle' fqn='org.osgi.service.rest.client.RestClient.getBundle' qn='RestClient.getBundle(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Retrieve the bundle representation for a given bundle Id.
+   </lead>
+   <description>
+Retrieve the bundle representation for a given bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+<return>A {@link BundleDTO} for the requested bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundle' fqn='org.osgi.service.rest.client.RestClient.getBundle' qn='RestClient.getBundle(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Retrieve the bundle representation for a given bundle path.
+   </lead>
+   <description>
+Retrieve the bundle representation for a given bundle path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+
+<return>A {@link BundleDTO} for the requested bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundleState' fqn='org.osgi.service.rest.client.RestClient.getBundleState' qn='RestClient.getBundleState(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='int' qualifiedTypeName='int' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Get the state for a given bundle Id.
+   </lead>
+   <description>
+Get the state for a given bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+<return>Returns the current bundle state as defined in (@link
+         org.osgi.framework.Bundle}.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundleState' fqn='org.osgi.service.rest.client.RestClient.getBundleState' qn='RestClient.getBundleState(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='int' qualifiedTypeName='int' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Get the state for a given bundle path.
+   </lead>
+   <description>
+Get the state for a given bundle path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+
+<return>Returns the current bundle state as defined in (@link
+         org.osgi.framework.Bundle}.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='startBundle' fqn='org.osgi.service.rest.client.RestClient.startBundle' qn='RestClient.startBundle(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Start a bundle given by its bundle Id.
+   </lead>
+   <description>
+Start a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='startBundle' fqn='org.osgi.service.rest.client.RestClient.startBundle' qn='RestClient.startBundle(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Start a bundle given by its URI path.
+   </lead>
+   <description>
+Start a bundle given by its URI path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='startBundle' fqn='org.osgi.service.rest.client.RestClient.startBundle' qn='RestClient.startBundle(long,int)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(long,int)' flatSignature='(long,int)'>
+   <lead>
+Start a bundle given by its bundle Id.
+   </lead>
+   <description>
+Start a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+<param name='options'>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#start(int)}</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+    <parameter name='options' dimension='' typeName='int' fqn='int' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='startBundle' fqn='org.osgi.service.rest.client.RestClient.startBundle' qn='RestClient.startBundle(String,int)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(java.lang.String,int)' flatSignature='(String,int)'>
+   <lead>
+Start a bundle given by its URI path.
+   </lead>
+   <description>
+Start a bundle given by its URI path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+<param name='options'>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#start(int)}</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+    <parameter name='options' dimension='' typeName='int' fqn='int' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='stopBundle' fqn='org.osgi.service.rest.client.RestClient.stopBundle' qn='RestClient.stopBundle(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Stop a bundle given by its bundle Id.
+   </lead>
+   <description>
+Stop a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='stopBundle' fqn='org.osgi.service.rest.client.RestClient.stopBundle' qn='RestClient.stopBundle(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Stop a bundle given by its URI path.
+   </lead>
+   <description>
+Stop a bundle given by its URI path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='stopBundle' fqn='org.osgi.service.rest.client.RestClient.stopBundle' qn='RestClient.stopBundle(long,int)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(long,int)' flatSignature='(long,int)'>
+   <lead>
+Stop a bundle given by its bundle Id.
+   </lead>
+   <description>
+Stop a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+<param name='options'>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#stop(int)}</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+    <parameter name='options' dimension='' typeName='int' fqn='int' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='stopBundle' fqn='org.osgi.service.rest.client.RestClient.stopBundle' qn='RestClient.stopBundle(String,int)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(java.lang.String,int)' flatSignature='(String,int)'>
+   <lead>
+Stop a bundle given by its URI path.
+   </lead>
+   <description>
+Stop a bundle given by its URI path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+<param name='options'>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#stop(int)}</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+    <parameter name='options' dimension='' typeName='int' fqn='int' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundleHeaders' fqn='org.osgi.service.rest.client.RestClient.getBundleHeaders' qn='RestClient.getBundleHeaders(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Map&lt;String, String&gt;' qualifiedTypeName='java.util.Map' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Get the header for a bundle given by its bundle Id.
+   </lead>
+   <description>
+Get the header for a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+<return>Returns the map of headers entries.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundleHeaders' fqn='org.osgi.service.rest.client.RestClient.getBundleHeaders' qn='RestClient.getBundleHeaders(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Map&lt;String, String&gt;' qualifiedTypeName='java.util.Map' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Get the header for a bundle given by its URI path.
+   </lead>
+   <description>
+Get the header for a bundle given by its URI path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+
+<return>Returns the map of headers entries.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundleStartLevel' fqn='org.osgi.service.rest.client.RestClient.getBundleStartLevel' qn='RestClient.getBundleStartLevel(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleStartLevelDTO' qualifiedTypeName='org.osgi.framework.startlevel.dto.BundleStartLevelDTO' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Get the start level for a bundle given by its bundle Id.
+   </lead>
+   <description>
+Get the start level for a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+<return>Returns a {@link BundleStartLevelDTO} describing the current
+         start level of the bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getBundleStartLevel' fqn='org.osgi.service.rest.client.RestClient.getBundleStartLevel' qn='RestClient.getBundleStartLevel(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleStartLevelDTO' qualifiedTypeName='org.osgi.framework.startlevel.dto.BundleStartLevelDTO' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Get the start level for a bundle given by its URI path.
+   </lead>
+   <description>
+Get the start level for a bundle given by its URI path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+
+<return>Returns a {@link BundleStartLevelDTO} describing the current
+         start level of the bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='setBundleStartLevel' fqn='org.osgi.service.rest.client.RestClient.setBundleStartLevel' qn='RestClient.setBundleStartLevel(long,int)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(long,int)' flatSignature='(long,int)'>
+   <lead>
+Set the start level for a bundle given by its bundle Id.
+   </lead>
+   <description>
+Set the start level for a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+<param name='startLevel'>The target start level.</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+    <parameter name='startLevel' dimension='' typeName='int' fqn='int' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='setBundleStartLevel' fqn='org.osgi.service.rest.client.RestClient.setBundleStartLevel' qn='RestClient.setBundleStartLevel(String,int)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='void' qualifiedTypeName='void' typeArgs='' dimension='' signature='(java.lang.String,int)' flatSignature='(String,int)'>
+   <lead/>
+   <description/>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+<param name='startLevel'>The target start level.</param>
+
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+    <parameter name='startLevel' dimension='' typeName='int' fqn='int' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='installBundle' fqn='org.osgi.service.rest.client.RestClient.installBundle' qn='RestClient.installBundle(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Install a new bundle given by an externally reachable location string,
+ typically describing a URL.
+   </lead>
+   <description>
+Install a new bundle given by an externally reachable location string,
+ typically describing a URL.
+   </description>
+
+<param name='location'>Passes the location string to retrieve the bundle content
+        from.</param>
+
+<return>Returns the {@link BundleDTO} of the newly installed bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='location' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='installBundle' fqn='org.osgi.service.rest.client.RestClient.installBundle' qn='RestClient.installBundle(String,InputStream)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(java.lang.String,java.io.InputStream)' flatSignature='(String,InputStream)'>
+   <lead>
+Install a new bundle given by an {@link InputStream} to a bundle content.
+   </lead>
+   <description>
+Install a new bundle given by an {@link InputStream} to a bundle content.
+   </description>
+
+<param name='location'>Passes the location string to be used to install the new
+        bundle.</param>
+<param name='in'>Passes the input stream to a bundle.</param>
+
+<return>Returns the {@link BundleDTO} of the newly installed bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='location' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+    <parameter name='in' dimension='' typeName='InputStream' fqn='java.io.InputStream' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='uninstallBundle' fqn='org.osgi.service.rest.client.RestClient.uninstallBundle' qn='RestClient.uninstallBundle(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Uninstall a bundle given by its bundle Id.
+   </lead>
+   <description>
+Uninstall a bundle given by its bundle Id.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+<return>Returns the {@link BundleDTO} of the uninstalled bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='uninstallBundle' fqn='org.osgi.service.rest.client.RestClient.uninstallBundle' qn='RestClient.uninstallBundle(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Uninstall a bundle given by its URI path.
+   </lead>
+   <description>
+Uninstall a bundle given by its URI path.
+   </description>
+
+<param name='bundlePath'>Addresses the bundle by its URI path.</param>
+
+<return>Returns the {@link BundleDTO} of the uninstalled bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='bundlePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='updateBundle' fqn='org.osgi.service.rest.client.RestClient.updateBundle' qn='RestClient.updateBundle(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Updates a bundle given by its bundle Id using the bundle-internal update
+ location.
+   </lead>
+   <description>
+Updates a bundle given by its bundle Id using the bundle-internal update
+ location.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+
+<return>Returns the {@link BundleDTO} of the updated bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='updateBundle' fqn='org.osgi.service.rest.client.RestClient.updateBundle' qn='RestClient.updateBundle(long,String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(long,java.lang.String)' flatSignature='(long,String)'>
+   <lead>
+Updates a bundle given by its URI path using the content at the specified
+ URL.
+   </lead>
+   <description>
+Updates a bundle given by its URI path using the content at the specified
+ URL.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+<param name='url'>The URL whose content is to be used to update the bundle.</param>
+
+<return>Returns the {@link BundleDTO} of the updated bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+    <parameter name='url' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='updateBundle' fqn='org.osgi.service.rest.client.RestClient.updateBundle' qn='RestClient.updateBundle(long,InputStream)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='BundleDTO' qualifiedTypeName='org.osgi.framework.dto.BundleDTO' typeArgs='' dimension='' signature='(long,java.io.InputStream)' flatSignature='(long,InputStream)'>
+   <lead>
+Updates a bundle given by its bundle Id and passing the new bundle
+ content in the form of an {@link InputStream}.
+   </lead>
+   <description>
+Updates a bundle given by its bundle Id and passing the new bundle
+ content in the form of an {@link InputStream}.
+   </description>
+
+<param name='id'>Addresses the bundle by its identifier.</param>
+<param name='in'>Passes an input stream to the new bundle content.</param>
+
+<return>Returns the {@link BundleDTO} of the updated bundle.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+    <parameter name='in' dimension='' typeName='InputStream' fqn='java.io.InputStream' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getServicePaths' fqn='org.osgi.service.rest.client.RestClient.getServicePaths' qn='RestClient.getServicePaths()' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Collection&lt;String&gt;' qualifiedTypeName='java.util.Collection' typeArgs='' dimension='' signature='()' flatSignature='()'>
+   <lead>
+Gets a collection of URI paths to all installed services.
+   </lead>
+   <description>
+Gets a collection of URI paths to all installed services.
+   </description>
+
+
+<return>Returns a collection of URI paths to the installed services.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getServicePaths' fqn='org.osgi.service.rest.client.RestClient.getServicePaths' qn='RestClient.getServicePaths(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Collection&lt;String&gt;' qualifiedTypeName='java.util.Collection' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Gets a collection of URI paths to all installed services.
+   </lead>
+   <description>
+Gets a collection of URI paths to all installed services.
+   </description>
+
+<param name='filter'>Passes a filter to restrict the result set.</param>
+
+<return>Returns a collection of URI paths to the installed services.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='filter' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getServiceReferences' fqn='org.osgi.service.rest.client.RestClient.getServiceReferences' qn='RestClient.getServiceReferences()' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Collection&lt;ServiceReferenceDTO&gt;' qualifiedTypeName='java.util.Collection' typeArgs='' dimension='' signature='()' flatSignature='()'>
+   <lead>
+Get the service representations for all services.
+   </lead>
+   <description>
+Get the service representations for all services.
+   </description>
+
+
+<return>Returns the service representations in the form of
+         {@link ServiceReferenceDTO} objects.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getServiceReferences' fqn='org.osgi.service.rest.client.RestClient.getServiceReferences' qn='RestClient.getServiceReferences(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='Collection&lt;ServiceReferenceDTO&gt;' qualifiedTypeName='java.util.Collection' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Get the service representations for all services.
+   </lead>
+   <description>
+Get the service representations for all services.
+   </description>
+
+<param name='filter'>Passes a filter to restrict the result set.</param>
+
+<return>Returns the service representations in the form of
+         {@link ServiceReferenceDTO} objects.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='filter' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getServiceReference' fqn='org.osgi.service.rest.client.RestClient.getServiceReference' qn='RestClient.getServiceReference(long)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='ServiceReferenceDTO' qualifiedTypeName='org.osgi.framework.dto.ServiceReferenceDTO' typeArgs='' dimension='' signature='(long)' flatSignature='(long)'>
+   <lead>
+Get the service representation for a service given by its service Id.
+   </lead>
+   <description>
+Get the service representation for a service given by its service Id.
+   </description>
+
+<param name='id'>Addresses the service by its identifier.</param>
+
+<return>The service representation as {@link ServiceReferenceDTO}.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='id' dimension='' typeName='long' fqn='long' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+    <method name='getServiceReference' fqn='org.osgi.service.rest.client.RestClient.getServiceReference' qn='RestClient.getServiceReference(String)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='ServiceReferenceDTO' qualifiedTypeName='org.osgi.framework.dto.ServiceReferenceDTO' typeArgs='' dimension='' signature='(java.lang.String)' flatSignature='(String)'>
+   <lead>
+Get the service representation for a service given by its URI path.
+   </lead>
+   <description>
+Get the service representation for a service given by its URI path.
+   </description>
+
+<param name='servicePath'>Addresses the service by its URI path.</param>
+
+<return>The service representation as {@link ServiceReferenceDTO}.</return>
+
+<throws name='Exception'>An exception representing a failure in the underlying
+         REST call.</throws>
+
+
+    <parameter name='servicePath' dimension='' typeName='String' fqn='java.lang.String' varargs='false'/>
+<exception name='Exception' fqn='java.lang.Exception'/>
+     </method>
+  </class>
+  <class name='RestClientFactory' fqn='org.osgi.service.rest.client.RestClientFactory' qn='RestClientFactory' package='org.osgi.service.rest.client' typeParam='' modifiers='public abstract' interface='yes' kind='INTERFACE'>
+<org.osgi.annotation.versioning.ProviderType></org.osgi.annotation.versioning.ProviderType>
+   <lead>
+Factory to construct new REST client instances.
+   </lead>
+   <description>
+Factory to construct new REST client instances. Each instance is specific to
+ a REST service endpoint.
+ 
+ <p>
+ Implementations can choose to extend this interface to add additional
+ creation methods, where additional arguments are needed for request signing,
+ etc.
+ 
+ </p><p>
+ In OSGi environments, this factory is registered as a service.</p>
+   </description>
+<author>@author $Id: e0acc61f6ee8dacb811d63efec86b4effd78b657 $</author>
+    <method name='createRestClient' fqn='org.osgi.service.rest.client.RestClientFactory.createRestClient' qn='RestClientFactory.createRestClient(URI)' package='org.osgi.service.rest.client' modifiers='public abstract' typeName='RestClient' qualifiedTypeName='org.osgi.service.rest.client.RestClient' typeArgs='' dimension='' signature='(java.net.URI)' flatSignature='(URI)'>
+   <lead>
+Create a new REST client instance.
+   </lead>
+   <description>
+Create a new REST client instance.
+   </description>
+
+<param name='uri'>The URI to the REST service endpoint.</param>
+
+<return>A new REST client instance for the specified REST service
+         endpoint.</return>
+
+
+
+    <parameter name='uri' dimension='' typeName='URI' fqn='java.net.URI' varargs='false'/>
+     </method>
+  </class>
+  </package>
+</top>

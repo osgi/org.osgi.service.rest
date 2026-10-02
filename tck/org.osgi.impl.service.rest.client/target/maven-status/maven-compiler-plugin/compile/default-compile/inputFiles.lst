@@ -1,0 +1,4 @@
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest.client/src/main/java/org/osgi/impl/service/rest/client/Activator.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest.client/src/main/java/org/osgi/impl/service/rest/client/DTOReflector.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest.client/src/main/java/org/osgi/impl/service/rest/client/RestClientFactoryImpl.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest.client/src/main/java/org/osgi/impl/service/rest/client/RestClientImpl.java

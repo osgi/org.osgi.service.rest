@@ -1,0 +1,6 @@
+org/osgi/test/cases/rest/client/js/junit/RestJSClientTestCase$1.class
+org/osgi/test/cases/rest/client/js/junit/RestTestUtils.class
+org/osgi/test/cases/rest/client/js/tb1/TBActivator.class
+org/osgi/test/cases/rest/client/js/junit/RestJSClientTestCase.class
+org/osgi/test/cases/rest/client/js/tb11/TBActivator.class
+org/osgi/test/cases/rest/client/js/tb2/TBActivator.class

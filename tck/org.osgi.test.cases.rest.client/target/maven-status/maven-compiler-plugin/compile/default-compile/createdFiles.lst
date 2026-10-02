@@ -1,0 +1,9 @@
+org/osgi/test/cases/rest/client/tb11/TBActivator.class
+org/osgi/test/cases/rest/client/tb21/TBActivator.class
+org/osgi/test/cases/rest/client/tb3/TBActivator.class
+org/osgi/test/cases/rest/client/tb4/TBActivator.class
+org/osgi/test/cases/rest/client/junit/RestTestUtils.class
+org/osgi/test/cases/rest/client/tb2/TBActivator.class
+org/osgi/test/cases/rest/client/junit/SignatureTestCase.class
+org/osgi/test/cases/rest/client/junit/RestClientTestCase.class
+org/osgi/test/cases/rest/client/tb1/TBActivator.class

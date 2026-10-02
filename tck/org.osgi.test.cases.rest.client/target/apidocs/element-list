@@ -1,0 +1,7 @@
+org.osgi.test.cases.rest.client.junit
+org.osgi.test.cases.rest.client.tb1
+org.osgi.test.cases.rest.client.tb11
+org.osgi.test.cases.rest.client.tb2
+org.osgi.test.cases.rest.client.tb21
+org.osgi.test.cases.rest.client.tb3
+org.osgi.test.cases.rest.client.tb4
