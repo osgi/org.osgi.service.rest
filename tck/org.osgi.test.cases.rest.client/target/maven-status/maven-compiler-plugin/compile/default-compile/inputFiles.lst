@@ -1,0 +1,9 @@
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/junit/RestClientTestCase.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/junit/RestTestUtils.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/junit/SignatureTestCase.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/tb1/TBActivator.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/tb11/TBActivator.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/tb2/TBActivator.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/tb21/TBActivator.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/tb3/TBActivator.java
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.test.cases.rest.client/src/main/java/org/osgi/test/cases/rest/client/tb4/TBActivator.java

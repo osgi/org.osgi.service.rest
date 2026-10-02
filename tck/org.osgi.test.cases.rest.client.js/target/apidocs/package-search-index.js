@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.osgi.test.cases.rest.client.js.junit"},{"l":"org.osgi.test.cases.rest.client.js.tb1"},{"l":"org.osgi.test.cases.rest.client.js.tb11"},{"l":"org.osgi.test.cases.rest.client.js.tb2"}];updateSearchResults();

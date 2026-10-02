@@ -1,0 +1,82 @@
+@options
+@packages
+-classpath
+'/home/stbischof/.m2/repository/org/osgi/org.osgi.framework/1.10.0/org.osgi.framework-1.10.0.jar:/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/api/target/org.osgi.service.rest-1.0.1-SNAPSHOT.jar:/home/stbischof/.m2/repository/org/osgi/org.osgi.annotation.versioning/1.1.2/org.osgi.annotation.versioning-1.1.2.jar:/home/stbischof/.m2/repository/org/osgi/org.osgi.annotation.bundle/2.0.0/org.osgi.annotation.bundle-2.0.0.jar:/home/stbischof/.m2/repository/org/osgi/org.osgi.resource/1.0.1/org.osgi.resource-1.0.1.jar:/home/stbischof/.m2/repository/org/osgi/org.osgi.util.tracker/1.5.4/org.osgi.util.tracker-1.5.4.jar:/home/stbischof/.m2/repository/org/osgi/osgi.annotation/8.0.1/osgi.annotation-8.0.1.jar:/home/stbischof/.m2/repository/org/eclipse/ecf/org.json/1.0.0.v201011060100/org.json-1.0.0.v201011060100.jar:/home/stbischof/.m2/repository/org/restlet/jse/org.restlet/2.1.7/org.restlet-2.1.7.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+8
+-sourcepath
+'/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/src/main/java:/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 1980 <a href="https://www.eclipse.org/">Eclipse Foundation</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs'
+-docencoding
+'UTF-8'
+-Xdoclint:none
+-doctitle
+'org.osgi.impl.service.rest 1.0.1-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/javadoc-bundle-options'
+-linkoffline
+'https://projects.eclipse.org/projects/technology.osgi/org.osgi.service.rest.reactor/org.osgi.service.rest/apidocs' '/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/api/target/apidocs'
+-notimestamp
+-tag
+"Immutable:t:Immutable"
+-tag
+"ThreadSafe:t:ThreadSafe"
+-tag
+"NotThreadSafe:t:NotThreadSafe"
+-tag
+"GuardedBy:mf:Guarded By:"
+-tag
+"security:m:Required Permissions"
+-tag
+"noimplement:t:Consumers of this API must not implement this interface"
+-tag
+"implNote:a:Implementation Note:"
+-use
+-version
+-windowtitle
+'org.osgi.impl.service.rest 1.0.1-SNAPSHOT API'
+org.osgi.impl.service.rest
+org.osgi.impl.service.rest.pojos
+org.osgi.impl.service.rest.resources
+/home/stbischof/.m2/repository/org/osgi/org.osgi.framework/1.10.0/org.osgi.framework-1.10.0.jar = 1607377478000
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/api/target/org.osgi.service.rest-1.0.1-SNAPSHOT.jar = 1790091487078
+/home/stbischof/.m2/repository/org/osgi/org.osgi.annotation.versioning/1.1.2/org.osgi.annotation.versioning-1.1.2.jar = 1634136809000
+/home/stbischof/.m2/repository/org/osgi/org.osgi.annotation.bundle/2.0.0/org.osgi.annotation.bundle-2.0.0.jar = 1644360733000
+/home/stbischof/.m2/repository/org/osgi/org.osgi.resource/1.0.1/org.osgi.resource-1.0.1.jar = 1607391117000
+/home/stbischof/.m2/repository/org/osgi/org.osgi.util.tracker/1.5.4/org.osgi.util.tracker-1.5.4.jar = 1634136906000
+/home/stbischof/.m2/repository/org/osgi/osgi.annotation/8.0.1/osgi.annotation-8.0.1.jar = 1634136808000
+/home/stbischof/.m2/repository/org/eclipse/ecf/org.json/1.0.0.v201011060100/org.json-1.0.0.v201011060100.jar = 1494159799000
+/home/stbischof/.m2/repository/org/restlet/jse/org.restlet/2.1.7/org.restlet-2.1.7.jar = 1787382173712
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/src/main/java = 1790012140648
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/generated-sources/annotations = 1790091598505
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/element-list = 1790093718686
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/constant-values.html = 1790093718907
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/serialized-form.html = 1790093718935
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/overview-tree.html = 1790093719167
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/index.html = 1790093719180
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/allclasses-index.html = 1790093719306
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/allpackages-index.html = 1790093719313
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/module-search-index.js = 1790093719315
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/package-search-index.js = 1790093719316
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/type-search-index.js = 1790093719317
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/member-search-index.js = 1790093719319
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/tag-search-index.js = 1790093719320
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/index-all.html = 1790093719430
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/search.html = 1790093719443
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/overview-summary.html = 1790093719472
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/help-doc.html = 1790093719562
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/stylesheet.css = 1790093719599
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/script.js = 1790093719602
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/copy.svg = 1790093719605
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/link.svg = 1790093719606
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/search.js = 1790093719627
+/home/stbischof/git/OSGI_MIGRATE/osgi_target/org.osgi.service.rest/tck/org.osgi.impl.service.rest/target/apidocs/search-page.js = 1790093719640

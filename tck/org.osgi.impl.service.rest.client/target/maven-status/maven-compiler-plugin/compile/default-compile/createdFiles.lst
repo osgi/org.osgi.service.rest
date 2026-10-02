@@ -1,0 +1,4 @@
+org/osgi/impl/service/rest/client/DTOReflector.class
+org/osgi/impl/service/rest/client/RestClientFactoryImpl.class
+org/osgi/impl/service/rest/client/Activator.class
+org/osgi/impl/service/rest/client/RestClientImpl.class

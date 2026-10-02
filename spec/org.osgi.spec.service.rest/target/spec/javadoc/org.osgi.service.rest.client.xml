@@ -1,0 +1,852 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xreflabel="org.osgi.service.rest.client"
+         version="5"
+         role="package"
+         xml:id="org.osgi.service.rest.client">
+   <title>org.osgi.service.rest.client</title>
+   <info>
+      <releaseinfo xml:id="org.osgi.service.rest.client-version">Version 1.0</releaseinfo>
+      <edition xml:id="org.osgi.service.rest.client-version.number">1.0</edition>
+   </info>
+   <para>
+Rest Service Client Package Version 1.0.
+   </para>
+   <section role="summary">
+      <title>Summary</title>
+      <itemizedlist>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.rest.client.RestClient">
+                  <code>RestClient</code>
+               </link> - 
+A Java client API for a REST service endpoint.
+   </para>
+         </listitem>
+         <listitem>
+            <para>
+               <link linkend="org.osgi.service.rest.client.RestClientFactory">
+                  <code>RestClientFactory</code>
+               </link> - 
+Factory to construct new REST client instances.
+   </para>
+         </listitem>
+      </itemizedlist>
+   </section>
+   <section xreflabel="RestClient"
+            role="class"
+            xml:id="org.osgi.service.rest.client.RestClient">
+      <title>public abstract RestClient</title>
+      <para>
+A Java client API for a REST service endpoint.
+ 
+ </para>
+      <para>
+ Provides a Java client API for accessing and managing a remote OSGi framework
+ through the REST API. Implementations of this interface will usually take the
+ URL to the remote REST Management Service instance as an argument in their
+ constructor. Further arguments might be needed, for example, if the cloud
+ provider requires URL signing.</para>
+      <formalpara role="parameter">
+         <title>Provider Type</title>
+         <para>Consumers of this API must not implement this type</para>
+      </formalpara>
+      <section xreflabel="getBundle(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundle-long-">
+         <title>public abstract BundleDTO getBundle(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Retrieve the bundle representation for a given bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>A {@link BundleDTO} for the requested bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundle(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundle-String-">
+         <title>public abstract BundleDTO getBundle(String bundlePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Retrieve the bundle representation for a given bundle path.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>A {@link BundleDTO} for the requested bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundleHeaders(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundleHeaders-long-">
+         <title>public abstract Map&lt;String, String&gt; getBundleHeaders(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Get the header for a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the map of headers entries.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundleHeaders(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundleHeaders-String-">
+         <title>public abstract Map&lt;String, String&gt; getBundleHeaders(String bundlePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Get the header for a bundle given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the map of headers entries.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundlePaths()"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundlePaths--">
+         <title>public abstract Collection&lt;String&gt; getBundlePaths() throws Exception</title>
+         <para role="description">
+Get the bundles currently installed on the managed framework.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns a collection of the bundle URIs in the form of Strings.
+         The URIs are relative to the REST API root URL and can be used to
+         retrieve bundle representations.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundles()"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundles--">
+         <title>public abstract Collection&lt;BundleDTO&gt; getBundles() throws Exception</title>
+         <para role="description">
+Get the bundle representations for all bundles currently installed in the
+ managed framework.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns a collection of BundleDTO objects.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundleStartLevel(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundleStartLevel-long-">
+         <title>public abstract BundleStartLevelDTO getBundleStartLevel(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Get the start level for a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns a {@link BundleStartLevelDTO} describing the current
+         start level of the bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundleStartLevel(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundleStartLevel-String-">
+         <title>public abstract BundleStartLevelDTO getBundleStartLevel(String bundlePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Get the start level for a bundle given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns a {@link BundleStartLevelDTO} describing the current
+         start level of the bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundleState(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundleState-long-">
+         <title>public abstract int getBundleState(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Get the state for a given bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the current bundle state as defined in (@link
+         org.osgi.framework.Bundle}.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getBundleState(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getBundleState-String-">
+         <title>public abstract int getBundleState(String bundlePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Get the state for a given bundle path.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the current bundle state as defined in (@link
+         org.osgi.framework.Bundle}.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getFrameworkStartLevel()"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getFrameworkStartLevel--">
+         <title>public abstract FrameworkStartLevelDTO getFrameworkStartLevel() throws Exception</title>
+         <para role="description">
+Retrieves the current framework start level.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the current framework start level in the form of a
+         {@link FrameworkStartLevelDTO}.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServicePaths()"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getServicePaths--">
+         <title>public abstract Collection&lt;String&gt; getServicePaths() throws Exception</title>
+         <para role="description">
+Gets a collection of URI paths to all installed services.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns a collection of URI paths to the installed services.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServicePaths(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getServicePaths-String-">
+         <title>public abstract Collection&lt;String&gt; getServicePaths(String filter) throws Exception</title>
+         <formalpara role="parameter">
+            <title>filter</title>
+            <para>Passes a filter to restrict the result set.</para>
+         </formalpara>
+         <para role="description">
+Gets a collection of URI paths to all installed services.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns a collection of URI paths to the installed services.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServiceReference(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getServiceReference-long-">
+         <title>public abstract ServiceReferenceDTO getServiceReference(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the service by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Get the service representation for a service given by its service Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The service representation as {@link ServiceReferenceDTO}.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServiceReference(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getServiceReference-String-">
+         <title>public abstract ServiceReferenceDTO getServiceReference(String servicePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>servicePath</title>
+            <para>Addresses the service by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Get the service representation for a service given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>The service representation as {@link ServiceReferenceDTO}.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServiceReferences()"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getServiceReferences--">
+         <title>public abstract Collection&lt;ServiceReferenceDTO&gt; getServiceReferences() throws Exception</title>
+         <para role="description">
+Get the service representations for all services.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the service representations in the form of
+         {@link ServiceReferenceDTO} objects.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="getServiceReferences(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.getServiceReferences-String-">
+         <title>public abstract Collection&lt;ServiceReferenceDTO&gt; getServiceReferences(String filter) throws Exception</title>
+         <formalpara role="parameter">
+            <title>filter</title>
+            <para>Passes a filter to restrict the result set.</para>
+         </formalpara>
+         <para role="description">
+Get the service representations for all services.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the service representations in the form of
+         {@link ServiceReferenceDTO} objects.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="installBundle(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.installBundle-String-">
+         <title>public abstract BundleDTO installBundle(String location) throws Exception</title>
+         <formalpara role="parameter">
+            <title>location</title>
+            <para>Passes the location string to retrieve the bundle content
+        from.</para>
+         </formalpara>
+         <para role="description">
+Install a new bundle given by an externally reachable location string,
+ typically describing a URL.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the {@link BundleDTO} of the newly installed bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="installBundle(String,InputStream)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.installBundle-String-InputStream-">
+         <title>public abstract BundleDTO installBundle(String location, InputStream in) throws Exception</title>
+         <formalpara role="parameter">
+            <title>location</title>
+            <para>Passes the location string to be used to install the new
+        bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>in</title>
+            <para>Passes the input stream to a bundle.</para>
+         </formalpara>
+         <para role="description">
+Install a new bundle given by an {@link InputStream} to a bundle content.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the {@link BundleDTO} of the newly installed bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="setBundleStartLevel(long,int)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.setBundleStartLevel-long-int-">
+         <title>public abstract void setBundleStartLevel(long id, int startLevel) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>startLevel</title>
+            <para>The target start level.</para>
+         </formalpara>
+         <para role="description">
+Set the start level for a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="setBundleStartLevel(String,int)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.setBundleStartLevel-String-int-">
+         <title>public abstract void setBundleStartLevel(String bundlePath, int startLevel) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>startLevel</title>
+            <para>The target start level.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="setFrameworkStartLevel(FrameworkStartLevelDTO)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.setFrameworkStartLevel-FrameworkStartLevelDTO-">
+         <title>public abstract void setFrameworkStartLevel(FrameworkStartLevelDTO startLevel) throws Exception</title>
+         <formalpara role="parameter">
+            <title>startLevel</title>
+            <para>set the framework start level to this target.</para>
+         </formalpara>
+         <para role="description">
+Sets the current framework start level.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="startBundle(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.startBundle-long-">
+         <title>public abstract void startBundle(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Start a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="startBundle(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.startBundle-String-">
+         <title>public abstract void startBundle(String bundlePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Start a bundle given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="startBundle(long,int)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.startBundle-long-int-">
+         <title>public abstract void startBundle(long id, int options) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>options</title>
+            <para>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#start(int)}</para>
+         </formalpara>
+         <para role="description">
+Start a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="startBundle(String,int)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.startBundle-String-int-">
+         <title>public abstract void startBundle(String bundlePath, int options) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>options</title>
+            <para>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#start(int)}</para>
+         </formalpara>
+         <para role="description">
+Start a bundle given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="stopBundle(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.stopBundle-long-">
+         <title>public abstract void stopBundle(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Stop a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="stopBundle(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.stopBundle-String-">
+         <title>public abstract void stopBundle(String bundlePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Stop a bundle given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="stopBundle(long,int)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.stopBundle-long-int-">
+         <title>public abstract void stopBundle(long id, int options) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>options</title>
+            <para>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#stop(int)}</para>
+         </formalpara>
+         <para role="description">
+Stop a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="stopBundle(String,int)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.stopBundle-String-int-">
+         <title>public abstract void stopBundle(String bundlePath, int options) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>options</title>
+            <para>Passes additional options as defined in
+        {@link org.osgi.framework.Bundle#stop(int)}</para>
+         </formalpara>
+         <para role="description">
+Stop a bundle given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="uninstallBundle(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.uninstallBundle-long-">
+         <title>public abstract BundleDTO uninstallBundle(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Uninstall a bundle given by its bundle Id.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the {@link BundleDTO} of the uninstalled bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="uninstallBundle(String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.uninstallBundle-String-">
+         <title>public abstract BundleDTO uninstallBundle(String bundlePath) throws Exception</title>
+         <formalpara role="parameter">
+            <title>bundlePath</title>
+            <para>Addresses the bundle by its URI path.</para>
+         </formalpara>
+         <para role="description">
+Uninstall a bundle given by its URI path.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the {@link BundleDTO} of the uninstalled bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="updateBundle(long)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.updateBundle-long-">
+         <title>public abstract BundleDTO updateBundle(long id) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <para role="description">
+Updates a bundle given by its bundle Id using the bundle-internal update
+ location.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the {@link BundleDTO} of the updated bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="updateBundle(long,String)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.updateBundle-long-String-">
+         <title>public abstract BundleDTO updateBundle(long id, String url) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>url</title>
+            <para>The URL whose content is to be used to update the bundle.</para>
+         </formalpara>
+         <para role="description">
+Updates a bundle given by its URI path using the content at the specified
+ URL.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the {@link BundleDTO} of the updated bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+      <section xreflabel="updateBundle(long,InputStream)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClient.updateBundle-long-InputStream-">
+         <title>public abstract BundleDTO updateBundle(long id, InputStream in) throws Exception</title>
+         <formalpara role="parameter">
+            <title>id</title>
+            <para>Addresses the bundle by its identifier.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>in</title>
+            <para>Passes an input stream to the new bundle content.</para>
+         </formalpara>
+         <para role="description">
+Updates a bundle given by its bundle Id and passing the new bundle
+ content in the form of an {@link InputStream}.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>Returns the {@link BundleDTO} of the updated bundle.</para>
+         </formalpara>
+         <formalpara role="parameter">
+            <title>Throws</title>
+            <para>
+               <code>Exception</code>– An exception representing a failure in the underlying
+         REST call.</para>
+         </formalpara>
+      </section>
+   </section>
+   <section xreflabel="RestClientFactory"
+            role="class"
+            xml:id="org.osgi.service.rest.client.RestClientFactory">
+      <title>public abstract RestClientFactory</title>
+      <para>
+Factory to construct new REST client instances. Each instance is specific to
+ a REST service endpoint.
+ 
+ </para>
+      <para>
+ Implementations can choose to extend this interface to add additional
+ creation methods, where additional arguments are needed for request signing,
+ etc.
+ 
+ </para>
+      <para>
+ In OSGi environments, this factory is registered as a service.</para>
+      <formalpara role="parameter">
+         <title>Provider Type</title>
+         <para>Consumers of this API must not implement this type</para>
+      </formalpara>
+      <section xreflabel="createRestClient(URI)"
+               role="method"
+               xml:id="org.osgi.service.rest.client.RestClientFactory.createRestClient-URI-">
+         <title>public abstract RestClient createRestClient(URI uri)</title>
+         <formalpara role="parameter">
+            <title>uri</title>
+            <para>The URI to the REST service endpoint.</para>
+         </formalpara>
+         <para role="description">
+Create a new REST client instance.
+   </para>
+         <formalpara role="parameter">
+            <title>Returns</title>
+            <para>A new REST client instance for the specified REST service
+         endpoint.</para>
+         </formalpara>
+      </section>
+   </section>
+</section>

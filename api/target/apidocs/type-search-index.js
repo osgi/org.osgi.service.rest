@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.osgi.service.rest","l":"RestApiExtension"},{"p":"org.osgi.service.rest.client","l":"RestClient"},{"p":"org.osgi.service.rest.client","l":"RestClientFactory"}];updateSearchResults();

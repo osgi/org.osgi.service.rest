@@ -1,0 +1,2 @@
+org.osgi.service.rest
+org.osgi.service.rest.client

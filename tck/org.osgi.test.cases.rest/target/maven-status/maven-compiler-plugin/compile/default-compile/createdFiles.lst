@@ -1,0 +1,12 @@
+org/osgi/test/cases/rest/junit/RestServiceJSONTestCase.class
+org/osgi/test/cases/rest/junit/RestServiceXMLTestCase.class
+org/osgi/test/cases/rest/tb4/TBActivator.class
+org/osgi/test/cases/rest/junit/SignatureTestCase.class
+org/osgi/test/cases/rest/tb2/TBActivator.class
+org/osgi/test/cases/rest/tb11/TBActivator.class
+org/osgi/test/cases/rest/tb6/TBActivator.class
+org/osgi/test/cases/rest/junit/RestTestUtils.class
+org/osgi/test/cases/rest/tb3/TBActivator.class
+org/osgi/test/cases/rest/tb21/TBActivator.class
+org/osgi/test/cases/rest/tb5/TBActivator.class
+org/osgi/test/cases/rest/tb1/TBActivator.class

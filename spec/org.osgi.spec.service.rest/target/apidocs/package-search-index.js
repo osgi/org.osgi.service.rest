@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.osgi.service.rest"},{"l":"org.osgi.service.rest.client"}];updateSearchResults();
