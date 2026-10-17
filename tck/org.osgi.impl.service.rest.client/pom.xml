@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.framework</artifactId>
-			<version>1.10.0</version>
+			<version>${org.osgi.framework.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -25,31 +25,31 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.dto</artifactId>
-			<version>1.1.1</version>
+			<version>${org.osgi.dto.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.ecf</groupId>
 			<artifactId>org.json</artifactId>
-			<version>1.0.0.v201011060100</version>
+			<version>${org.json.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet</artifactId>
-			<version>2.1.7</version>
+			<groupId>org.osgi.tck</groupId>
+			<artifactId>org.osgi.licensed.org.restlet</artifactId>
+			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet.ext.json</artifactId>
-			<version>2.1.7</version>
+			<groupId>org.osgi.tck</groupId>
+			<artifactId>org.osgi.licensed.org.restlet.ext.json</artifactId>
+			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet.ext.xml</artifactId>
-			<version>2.1.7</version>
+			<groupId>org.osgi.tck</groupId>
+			<artifactId>org.osgi.licensed.org.restlet.ext.xml</artifactId>
+			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

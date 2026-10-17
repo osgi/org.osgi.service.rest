@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.framework</artifactId>
-			<version>1.10.0</version>
+			<version>${org.osgi.framework.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
