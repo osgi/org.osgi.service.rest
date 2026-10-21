@@ -17,6 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.rest.junit;
 
+import static org.osgi.test.assertj.bundle.BundleAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -53,6 +57,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -76,6 +82,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   private Validator validator;
   private DocumentBuilder documentBuilder;
 
+  @BeforeEach
   public void setUp() throws Exception {
     super.setUp();
     SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
@@ -87,6 +94,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   }
 
   // 5.1.1
+  @Test
   public void testFrameworkStartLevel() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException,
       TransformerException {
     FrameworkStartLevel frameworkStartLevel = getFrameworkStartLevel();
@@ -102,8 +110,8 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     frameworkStartLevel = getFrameworkStartLevel();
 
-    assertEquals("startLevel after PUT.", startLevel, frameworkStartLevel.getStartLevel());
-    assertEquals("initialBundleStartLevel after PUT.", initialBundleStartLevel, frameworkStartLevel.getInitialBundleStartLevel());
+    assertThat(frameworkStartLevel.getStartLevel()).as("startLevel after PUT.").isEqualTo(startLevel);
+    assertThat(frameworkStartLevel.getInitialBundleStartLevel()).as("initialBundleStartLevel after PUT.").isEqualTo(initialBundleStartLevel);
 
     xmlStartLevel = getXMLObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
     assertFWStartLevel(frameworkStartLevel, xmlStartLevel);
@@ -118,6 +126,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
   // tests list bundles and install bundle from invalid location/content.
   // successful install is covered by RestServiceJSONTestCase
+  @Test
   public void testBundleList() throws BundleException, IOException, ParserConfigurationException, SAXException,
       TransformerConfigurationException, TransformerException {
     Element xmlBundleList = getXMLObject(BUNDLE_LIST_URI, BUNDLE_LIST_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
@@ -138,6 +147,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   }
 
   // 5.1.2.2
+  @Test
   public void testBundleRepresentationsList() throws IOException, ParserConfigurationException, SAXException,
       TransformerConfigurationException, TransformerException {
     Element xmlBundleRepresentationsList = getXMLObject(BUNDLE_REPRESENTATIONS_LIST_URI, BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_XML,
@@ -154,28 +164,29 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   }
 
   // 5.1.3
+  @Test
   public void testBundle() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException,
       TransformerException, BundleException {
     // GET
     Bundle bundle = getRandomBundle();
     Element xmlBundleRepresentation = getXMLObject(getBundleURI(bundle.getBundleId()), BUNDLE_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
-    assertNotNull("Bundle representation : " + bundle.getBundleId() + " :", xmlBundleRepresentation);
+    assertThat(xmlBundleRepresentation).as("Bundle representation : " + bundle.getBundleId() + " :").isNotNull();
 
     assertBundleRepresentation(bundle, xmlBundleRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
     Object object = getXMLObject(getBundleURI(notExistingBundleId), BUNDLE_CONTENT_TYPE_XML, HttpURLConnection.HTTP_NOT_FOUND);
-    assertNull("Get not existing bundle " + notExistingBundleId + " :", object);
+    assertThat(object).as("Get not existing bundle " + notExistingBundleId + " :").isNull();
 
     // PUT with location
     Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
-    Element result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), getContext().getBundle().getEntry(TB11), null, true,
+    Element result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), context.getBundle().getEntry(TB11), null, true,
       HttpURLConnection.HTTP_NO_CONTENT, null);
-    assertNull("Update bundle by location " + tb1Bundle.getBundleId() + " :", result);
+    assertThat(result).as("Update bundle by location " + tb1Bundle.getBundleId() + " :").isNull();
 
-    result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB11), null, true,
+    result = updateBundle(getBundleURI(notExistingBundleId), context.getBundle().getEntry(TB11), null, true,
       HttpURLConnection.HTTP_NOT_FOUND, null);
-    assertNull("Update not existing bundle " + notExistingBundleId + " :", result);
+    assertThat(result).as("Update not existing bundle " + notExistingBundleId + " :").isNull();
 
     result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_BAD_REQUEST,
       BUNDLE_EXCEPTION_CONTENT_TYPE_XML);
@@ -184,13 +195,13 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     // PUT with bundle content
     Bundle tb2Bundle = getTestBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME, TB2);
 
-    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), getContext().getBundle().getEntry(TB21), null, false,
+    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), context.getBundle().getEntry(TB21), null, false,
       HttpURLConnection.HTTP_NO_CONTENT, null);
-    assertNull("Update bundle by content " + tb2Bundle.getBundleId() + " :", result);
+    assertThat(result).as("Update bundle by content " + tb2Bundle.getBundleId() + " :").isNull();
 
-    result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB21), null, false,
+    result = updateBundle(getBundleURI(notExistingBundleId), context.getBundle().getEntry(TB21), null, false,
       HttpURLConnection.HTTP_NOT_FOUND, null);
-    assertNull("Update not existing bundle " + notExistingBundleId + " :", result);
+    assertThat(result).as("Update not existing bundle " + notExistingBundleId + " :").isNull();
 
     result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_BAD_REQUEST,
       BUNDLE_EXCEPTION_CONTENT_TYPE_XML);
@@ -199,11 +210,11 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     // DELETE
     result = uninstallBundle(getBundleURI(tb1Bundle.getBundleId()), HttpURLConnection.HTTP_NO_CONTENT);
-    assertNull("Uninstall bundle " + tb1Bundle.getBundleId() + " :", result);
-    assertNull("Framework bundle " + tb1Bundle.getBundleId() + " :", getContext().getBundle(tb1Bundle.getBundleId()));
+    assertThat(result).as("Uninstall bundle " + tb1Bundle.getBundleId() + " :").isNull();
+    assertThat(context.getBundle(tb1Bundle.getBundleId())).as("Framework bundle " + tb1Bundle.getBundleId() + " :").isNull();
 
     result = uninstallBundle(getBundleURI(tb1Bundle.getBundleId()), HttpURLConnection.HTTP_NOT_FOUND);
-    assertNull("Uninstall already uninstalled bundle " + tb1Bundle.getBundleId() + " :", result);
+    assertThat(result).as("Uninstall already uninstalled bundle " + tb1Bundle.getBundleId() + " :").isNull();
 
     // stop tb2 bundle throws Exception
     tb2Bundle.start();
@@ -211,20 +222,21 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   }
 
   // 5.1.4
+  @Test
   public void testBundleState() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException,
       TransformerException, BundleException {
     // GET
     Bundle bundle = getRandomBundle();
     Element xmlBundleStateRepresentation = getXMLObject(getBundleStateURI(bundle.getBundleId()), BUNDLE_STATE_CONTENT_TYPE_XML,
       HttpURLConnection.HTTP_OK);
-    assertNotNull("Bundle state " + bundle.getBundleId() + " :", xmlBundleStateRepresentation);
+    assertThat(xmlBundleStateRepresentation).as("Bundle state " + bundle.getBundleId() + " :").isNotNull();
     assertBundleStateRepresentation(bundle, xmlBundleStateRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
 
     xmlBundleStateRepresentation = getXMLObject(getBundleStateURI(notExistingBundleId), BUNDLE_STATE_CONTENT_TYPE_XML,
       HttpURLConnection.HTTP_NOT_FOUND);
-    assertNull("Bundle state for not existing bundle " + notExistingBundleId + " :", xmlBundleStateRepresentation);
+    assertThat(xmlBundleStateRepresentation).as("Bundle state for not existing bundle " + notExistingBundleId + " :").isNull();
 
     // PUT
     Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
@@ -234,9 +246,9 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     int newState = tb1State == Bundle.INSTALLED ? Bundle.ACTIVE : Bundle.RESOLVED;
     xmlBundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, HttpURLConnection.HTTP_OK,
       APPLICATION_XML, APPLICATION_XML, BUNDLE_STATE_CONTENT_TYPE_XML);
-    assertNotNull("Bundle state updated  " + tb1Bundle.getBundleId() + " :", xmlBundleStateRepresentation);
+    assertThat(xmlBundleStateRepresentation).as("Bundle state updated  " + tb1Bundle.getBundleId() + " :").isNotNull();
 
-    assertEquals("New state ", newState, tb1Bundle.getState());
+    assertThat(tb1Bundle.getState()).as("New state ").isEqualTo(newState);
     assertBundleStateRepresentation(tb1Bundle, xmlBundleStateRepresentation);
 
     // start bundle with Bundle-ActivationPolicy by bundle id
@@ -248,14 +260,14 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     xmlBundleStateRepresentation = updateBundleState(getBundleStateURI(tb3Bundle.getBundleId()), Bundle.ACTIVE,
       Bundle.START_ACTIVATION_POLICY, HttpURLConnection.HTTP_OK, APPLICATION_XML, APPLICATION_XML, BUNDLE_STATE_CONTENT_TYPE_XML);
-    assertNotNull("Bundle state updated  " + tb3Bundle.getBundleId() + " :", xmlBundleStateRepresentation);
+    assertThat(xmlBundleStateRepresentation).as("Bundle state updated  " + tb3Bundle.getBundleId() + " :").isNotNull();
 
-    assertEquals("New state for 'lazy' bundle ", Bundle.STARTING, tb3Bundle.getState());
+    assertThat(tb3Bundle).as("New state for 'lazy' bundle ").isInState(Bundle.STARTING);
     assertBundleStateRepresentation(tb3Bundle, xmlBundleStateRepresentation);
 
     xmlBundleStateRepresentation = updateBundleState(getBundleStateURI(notExistingBundleId), newState, -1,
       HttpURLConnection.HTTP_NOT_FOUND, APPLICATION_XML, APPLICATION_XML, null);
-    assertNull("Bundle state updated for not existing bundle " + notExistingBundleId + " :", xmlBundleStateRepresentation);
+    assertThat(xmlBundleStateRepresentation).as("Bundle state updated for not existing bundle " + notExistingBundleId + " :").isNull();
 
     Bundle tb21Bundle = getTestBundle(TB21_TEST_BUNDLE_SYMBOLIC_NAME, TB21);
     if (tb21Bundle.getState() != Bundle.ACTIVE) {
@@ -269,29 +281,31 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     // stop bundle with options
     xmlBundleStateRepresentation = updateBundleState(getBundleStateURI(tb3Bundle.getBundleId()), Bundle.RESOLVED, Bundle.STOP_TRANSIENT,
       HttpURLConnection.HTTP_OK, APPLICATION_XML, APPLICATION_XML, BUNDLE_STATE_CONTENT_TYPE_XML);
-    assertNotNull("Bundle state updated  " + tb3Bundle.getBundleId() + " :", xmlBundleStateRepresentation);
+    assertThat(xmlBundleStateRepresentation).as("Bundle state updated  " + tb3Bundle.getBundleId() + " :").isNotNull();
 
-    assertEquals("New state ", Bundle.RESOLVED, tb3Bundle.getState());
+    assertThat(tb3Bundle).as("New state ").isInState(Bundle.RESOLVED);
     assertBundleStateRepresentation(tb3Bundle, xmlBundleStateRepresentation);
   }
 
   // 5.1.5
+  @Test
   public void testBundleHeader() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException,
       TransformerException {
     // GET
     Bundle bundle = getRandomBundle();
     Element xmlBundleHeaderRepresentation = getXMLObject(getBundleHeaderURI(bundle.getBundleId()), BUNDLE_HEADER_CONTENT_TYPE_XML,
         HttpURLConnection.HTTP_OK);
-    assertNotNull("Bundle header " + bundle.getBundleId() + ": ", xmlBundleHeaderRepresentation);
+    assertThat(xmlBundleHeaderRepresentation).as("Bundle header " + bundle.getBundleId() + ": ").isNotNull();
     assertBundleHeaderRepresentation(bundle, xmlBundleHeaderRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
     xmlBundleHeaderRepresentation = getXMLObject(getBundleHeaderURI(notExistingBundleId), BUNDLE_HEADER_CONTENT_TYPE_XML,
       HttpURLConnection.HTTP_NOT_FOUND);
-    assertNull("Bundle header for not existing bundle " + notExistingBundleId + " :", xmlBundleHeaderRepresentation);
+    assertThat(xmlBundleHeaderRepresentation).as("Bundle header for not existing bundle " + notExistingBundleId + " :").isNull();
   }
 
   // 5.1.6
+  @Test
   public void testBundleStartLevel() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException,
       TransformerException, BundleException {
     // GET
@@ -303,7 +317,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     long notExistingBundleId = getNotExistingBundleId();
     xmlBundleStartLevelRepresentation = getXMLObject(getBundleStartLevelURI(notExistingBundleId), BUNDLE_START_LEVEL_CONTENT_TYPE_XML,
       HttpURLConnection.HTTP_NOT_FOUND);
-    assertNull("Bundle start level for not existing bundle " + notExistingBundleId + " :", xmlBundleStartLevelRepresentation);
+    assertThat(xmlBundleStartLevelRepresentation).as("Bundle start level for not existing bundle " + notExistingBundleId + " :").isNull();
 
     // PUT
     Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
@@ -317,17 +331,18 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     assertBundleStartLevelRepresentation(tb1Bundle, xmlBundleStartLevelRepresentation);
 
     tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
-    assertEquals("New start level ", newStartLevel, tb1StartLevel);
+    assertThat(tb1StartLevel).as("New start level ").isEqualTo(newStartLevel);
 
     xmlBundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(notExistingBundleId), newStartLevel,
       HttpURLConnection.HTTP_NOT_FOUND, APPLICATION_XML, APPLICATION_XML);
-    assertNull("Bundle start level updated for not existing bundle " + notExistingBundleId + " :", xmlBundleStartLevelRepresentation);
+    assertThat(xmlBundleStartLevelRepresentation).as("Bundle start level updated for not existing bundle " + notExistingBundleId + " :").isNull();
 
     updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), -1, HttpURLConnection.HTTP_BAD_REQUEST,
       APPLICATION_XML, APPLICATION_XML);
   }
 
   // 5.1.7.1
+  @Test
   public void testServiceList() throws IOException, InvalidSyntaxException, ParserConfigurationException, SAXException,
       TransformerConfigurationException, TransformerException {
     String filter = null;
@@ -344,10 +359,11 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     String invalidFilterURI = SERVICE_LIST_URI + "?filter=invalid-filter";
     xmlServiceList = getXMLObject(invalidFilterURI, null, HttpURLConnection.HTTP_BAD_REQUEST);
-    assertNull("Request with invalid filter " + invalidFilterURI, xmlServiceList);
+    assertThat(xmlServiceList).as("Request with invalid filter " + invalidFilterURI).isNull();
   }
 
   // 5.1.7.2
+  @Test
   public void testServiceRepresentationsList() throws IOException, InvalidSyntaxException, ParserConfigurationException, SAXException,
       TransformerConfigurationException, TransformerException {
     String filter = null;
@@ -366,25 +382,27 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     filter = "invalid-filter";
     xmlServiceRepresentationsList = getXMLObject(getServiceRepresentationListURI(filter), null, HttpURLConnection.HTTP_BAD_REQUEST);
-    assertNull("Request with invalid filter '" + filter + "'", xmlServiceRepresentationsList);
+    assertThat(xmlServiceRepresentationsList).as("Request with invalid filter '" + filter + "'").isNull();
   }
 
   // 5.1.8
+  @Test
   public void testService() throws Exception {
     ServiceReference<?> serviceRef = getRandomService();
 
     // GET
     Element xmlServiceRepresentation = getXMLObject(getServiceURI(serviceRef), SERVICE_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
-    assertNotNull("Service representation " + serviceRef + " :", xmlServiceRepresentation);
+    assertThat(xmlServiceRepresentation).as("Service representation " + serviceRef + " :").isNotNull();
 
     assertService(xmlServiceRepresentation, serviceRef);
 
     String notExistingSeriveId = "not-existing-servicve-" + System.currentTimeMillis();
     xmlServiceRepresentation = getXMLObject(getServiceURI(notExistingSeriveId), SERVICE_CONTENT_TYPE_XML, HttpURLConnection.HTTP_NOT_FOUND);
-    assertNull("Service representation for not existing service " + notExistingSeriveId + " :", xmlServiceRepresentation);
+    assertThat(xmlServiceRepresentation).as("Service representation for not existing service " + notExistingSeriveId + " :").isNull();
   }
 
   // 5.6.1 The Extensions Resource
+  @Test
   public void testExtensions() throws IOException, BundleException, ParserConfigurationException, SAXException,
       TransformerConfigurationException, TransformerException {
     Element xmlExtensions = getXMLObject("extensions", EXTENSIONS_CONTENT_TYPE_XML, HttpURLConnection.HTTP_OK);
@@ -419,42 +437,41 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     String startLevelResult = getTextValue(element, "startLevel");
     String initialBundleStartLevelResult = getTextValue(element, "initialBundleStartLevel");
 
-    assertNotNull("startLevel element missing.", startLevelResult);
-    assertNotNull("initialBundleStartLevel element missing", initialBundleStartLevelResult);
+    assertThat(startLevelResult).as("startLevel element missing.").isNotNull();
+    assertThat(initialBundleStartLevelResult).as("initialBundleStartLevel element missing").isNotNull();
 
-    assertEquals("startLevel is not equal.", frameworkStartLevel.getStartLevel(), Integer.parseInt(startLevelResult));
-    assertEquals("initialBundleStartLevel is not equal.", frameworkStartLevel.getInitialBundleStartLevel(),
-      Integer.parseInt(initialBundleStartLevelResult));
+    assertThat(Integer.parseInt(startLevelResult)).as("startLevel is not equal.").isEqualTo(frameworkStartLevel.getStartLevel());
+    assertThat(Integer.parseInt(initialBundleStartLevelResult)).as("initialBundleStartLevel is not equal.").isEqualTo(frameworkStartLevel.getInitialBundleStartLevel());
   }
 
   protected void assertBundleRepresentation(Bundle bundle, Element element) {
     String lastModifiedStr = getTextValue(element, "lastModified");
-    assertNotNull("lastModified element missing.", lastModifiedStr);
+    assertThat(lastModifiedStr).as("lastModified element missing.").isNotNull();
 
     String locationStr = getTextValue(element, "location");
-    assertNotNull("location element missing.", locationStr);
+    assertThat(locationStr).as("location element missing.").isNotNull();
 
     String stateStr = getTextValue(element, "state");
-    assertNotNull("state element missing.", stateStr);
+    assertThat(stateStr).as("state element missing.").isNotNull();
 
     String symbolicNameStr = getTextValue(element, "symbolicName");
-    assertNotNull("symbolicName element missing.", symbolicNameStr);
+    assertThat(symbolicNameStr).as("symbolicName element missing.").isNotNull();
 
     String versionStr = getTextValue(element, "version");
-    assertNotNull("version element missing.", versionStr);
+    assertThat(versionStr).as("version element missing.").isNotNull();
 
-    assertEquals("lastModified:", bundle.getLastModified(), Long.valueOf(lastModifiedStr).longValue());
-    assertEquals("location:", bundle.getLocation(), locationStr);
-    assertEquals("state:", bundle.getState(), Integer.valueOf(stateStr).intValue());
-    assertEquals("symbolicName:", bundle.getSymbolicName(), symbolicNameStr);
-    assertEquals("version:", bundle.getVersion().toString(), versionStr);
+    assertThat(Long.valueOf(lastModifiedStr).longValue()).as("lastModified:").isEqualTo(bundle.getLastModified());
+    assertThat(locationStr).as("location:").isEqualTo(bundle.getLocation());
+    assertThat(Integer.valueOf(stateStr).intValue()).as("state:").isEqualTo(bundle.getState());
+    assertThat(symbolicNameStr).as("symbolicName:").isEqualTo(bundle.getSymbolicName());
+    assertThat(versionStr).as("version:").isEqualTo(bundle.getVersion().toString());
   }
 
   protected void assertBundleListRepresentation(Bundle[] bundles, Element xmlBundleList) {
-    assertNotNull("Bundle list not null.", xmlBundleList);
+    assertThat(xmlBundleList).as("Bundle list not null.").isNotNull();
 
     NodeList bundleList = xmlBundleList.getElementsByTagName("uri");
-    assertEquals("Bundle list length:", bundles.length, bundleList.getLength());
+    assertThat(bundleList.getLength()).as("Bundle list length:").isEqualTo(bundles.length);
 
     HashSet<String> bundleURIs = new HashSet<String>();
     for (int k = 0; k < bundleList.getLength(); k++) {
@@ -465,15 +482,15 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     for (Bundle bundle : bundles) {
       String bundleURI = getBundleURI(bundle.getBundleId());
-      assertTrue("Bundle list contains " + bundleURI + " :", bundleURIs.contains(bundleURI));
+      assertThat(bundleURIs.contains(bundleURI)).as("Bundle list contains " + bundleURI + " :").isTrue();
     }
   }
 
   protected void assertBundleRepresentationList(Bundle[] bundles, Element xmlBundleList) {
-    assertNotNull("Bundle list not null.", xmlBundleList);
+    assertThat(xmlBundleList).as("Bundle list not null.").isNotNull();
     NodeList bundleList = xmlBundleList.getElementsByTagName("bundle");
 
-    assertEquals("Bundle representations list length:", bundles.length, bundleList.getLength());
+    assertThat(bundleList.getLength()).as("Bundle representations list length:").isEqualTo(bundles.length);
 
     Hashtable<String, Element> bundleRepresentations = new Hashtable<String, Element>();
     for (int k = 0; k < bundleList.getLength(); k++) {
@@ -486,20 +503,20 @@ public class RestServiceXMLTestCase extends RestTestUtils {
     for (Bundle bundle : bundles) {
       long bundleId = bundle.getBundleId();
       Element bundleRepresentation = bundleRepresentations.get(String.valueOf(bundleId));
-      assertNotNull("Bundle representations list contains " + bundleId + " :", bundleRepresentation);
+      assertThat(bundleRepresentation).as("Bundle representations list contains " + bundleId + " :").isNotNull();
       assertBundleRepresentation(bundle, bundleRepresentation);
     }
   }
 
   protected void assertBundleStateRepresentation(Bundle bundle, Element bundleState) {
     String stateStr = getTextValue(bundleState, "state");
-    assertNotNull("Bundle state.", stateStr);
+    assertThat(stateStr).as("Bundle state.").isNotNull();
 
-    assertEquals("state:", bundle.getState(), Integer.valueOf(stateStr).intValue());
+    assertThat(Integer.valueOf(stateStr).intValue()).as("state:").isEqualTo(bundle.getState());
   }
 
   protected void assertBundleHeaderRepresentation(Bundle bundle, Element bundleHeader) {
-    assertNotNull("Bundle header not null.", bundleHeader);
+    assertThat(bundleHeader).as("Bundle header not null.").isNotNull();
     NodeList headerList = bundleHeader.getElementsByTagName("entry");
 
     Hashtable<String, String> responseHeaders = new Hashtable<String, String>();
@@ -513,40 +530,39 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     Dictionary<String, String> headers = bundle.getHeaders();
 
-    assertEquals("Headers size", headers.size(), responseHeaders.size());
+    assertThat(responseHeaders.size()).as("Headers size").isEqualTo(headers.size());
 
     for (Enumeration<String> keys = headers.keys(); keys.hasMoreElements();) {
       String key = keys.nextElement();
-      assertEquals(key + ":", headers.get(key), responseHeaders.get(key));
+      assertThat(responseHeaders.get(key)).as(key + ":").isEqualTo(headers.get(key));
     }
   }
 
   protected void assertBundleStartLevelRepresentation(Bundle bundle, Element bundleStartLevelRepresentation) {
-    assertNotNull("Bundle StartLevel not null.", bundleStartLevelRepresentation);
+    assertThat(bundleStartLevelRepresentation).as("Bundle StartLevel not null.").isNotNull();
 
     String startLevelStr = getTextValue(bundleStartLevelRepresentation, "startLevel");
-    assertNotNull("startLevel not null.", startLevelStr);
+    assertThat(startLevelStr).as("startLevel not null.").isNotNull();
 
     String activationPolicyUsedStr = getTextValue(bundleStartLevelRepresentation, "activationPolicyUsed");
-    assertNotNull("activationPolicyUsed not null.", activationPolicyUsedStr);
+    assertThat(activationPolicyUsedStr).as("activationPolicyUsed not null.").isNotNull();
 
     String persistentlyStartedStr = getTextValue(bundleStartLevelRepresentation, "persistentlyStarted");
-    assertNotNull("persistentlyStarted not null.", persistentlyStartedStr);
+    assertThat(persistentlyStartedStr).as("persistentlyStarted not null.").isNotNull();
 
     BundleStartLevel bundleStartLevel = getBundleStartLevel(bundle);
 
-    assertEquals("startLevel:", bundleStartLevel.getStartLevel(), Integer.valueOf(startLevelStr).intValue());
-    assertEquals("activationPolicyUsed:", bundleStartLevel.isActivationPolicyUsed(),
-      Boolean.valueOf(activationPolicyUsedStr).booleanValue());
-    assertEquals("persistentlyStarted:", bundleStartLevel.isPersistentlyStarted(), Boolean.valueOf(persistentlyStartedStr).booleanValue());
+    assertThat(Integer.valueOf(startLevelStr).intValue()).as("startLevel:").isEqualTo(bundleStartLevel.getStartLevel());
+    assertThat(Boolean.valueOf(activationPolicyUsedStr).booleanValue()).as("activationPolicyUsed:").isEqualTo(bundleStartLevel.isActivationPolicyUsed());
+    assertThat(Boolean.valueOf(persistentlyStartedStr).booleanValue()).as("persistentlyStarted:").isEqualTo(bundleStartLevel.isPersistentlyStarted());
   }
 
   protected void assertServiceList(Element xmlServiceList, ServiceReference<?>[] serviceRefs) {
-    assertNotNull("Service list", xmlServiceList);
+    assertThat(xmlServiceList).as("Service list").isNotNull();
 
     NodeList serviceList = xmlServiceList.getElementsByTagName("uri");
-    assertNotNull("Service uri list ", serviceList);
-    assertEquals("Service list length:", serviceRefs.length, serviceList.getLength());
+    assertThat(serviceList).as("Service uri list ").isNotNull();
+    assertThat(serviceList.getLength()).as("Service list length:").isEqualTo(serviceRefs.length);
 
     HashSet<String> serviceURIs = new HashSet<String>();
     for (int k = 0; k < serviceList.getLength(); k++) {
@@ -557,16 +573,16 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
     for (ServiceReference<?> serviceRef : serviceRefs) {
       String serviceURI = getServiceURI(serviceRef.getProperty(Constants.SERVICE_ID).toString());
-      assertTrue("Service list contains " + serviceURI + ": ", serviceURIs.contains(serviceURI));
+      assertThat(serviceURIs.contains(serviceURI)).as("Service list contains " + serviceURI + ": ").isTrue();
     }
   }
 
   protected void assertServiceRepresentationList(Element xmlServiceRepresentationList, ServiceReference<?>[] serviceRefs) {
     if (serviceRefs != null) {
-      assertNotNull("Service representation list", xmlServiceRepresentationList);
+      assertThat(xmlServiceRepresentationList).as("Service representation list").isNotNull();
 
       NodeList serviceList = xmlServiceRepresentationList.getElementsByTagName("service");
-      assertNotNull("Service list", serviceList);
+      assertThat(serviceList).as("Service list").isNotNull();
 
       Hashtable<Object, Element> serviceRepresentationHT = new Hashtable<Object, Element>();
 
@@ -574,11 +590,11 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         Element serviceElement = (Element)serviceList.item(k);
         try {
           NodeList propertiesList = serviceElement.getElementsByTagName("properties");
-          assertNotNull("Service representation properties ", propertiesList);
+          assertThat(propertiesList).as("Service representation properties ").isNotNull();
           Element propertiesElement = (Element)propertiesList.item(0);
 
           NodeList propertyList = propertiesElement.getElementsByTagName("property");
-          assertNotNull("Property list", propertyList);
+          assertThat(propertyList).as("Property list").isNotNull();
 
           for (int i = 0; i < propertyList.getLength(); i++) {
             Element propertyElement = (Element)propertyList.item(i);
@@ -595,7 +611,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
         }
       }
 
-      assertEquals("Service representation list size", serviceRefs.length, serviceRepresentationHT.size());
+      assertThat(serviceRepresentationHT.size()).as("Service representation list size").isEqualTo(serviceRefs.length);
       for (ServiceReference<?> serviceRef : serviceRefs) {
         String id = String.valueOf(serviceRef.getProperty(Constants.SERVICE_ID));
         debug("Assert service:" + id, null);
@@ -605,13 +621,13 @@ public class RestServiceXMLTestCase extends RestTestUtils {
   }
 
   protected void assertBundleException(Element xmlBundleException, String assertMessage) {
-    assertNotNull(assertMessage, xmlBundleException);
+    assertThat(xmlBundleException).as(assertMessage).isNotNull();
 
     String typecodeResult = getTextValue(xmlBundleException, "typecode");
     String messageResult = getTextValue(xmlBundleException, "message");
 
-    assertTrue(assertMessage, Integer.parseInt(typecodeResult) >= 0); // some of BundleException error codes
-    assertTrue("Error message is not null.", messageResult != null);
+    assertThat(Integer.parseInt(typecodeResult) >= 0).as(assertMessage).isTrue(); // some of BundleException error codes
+    assertThat(messageResult != null).as("Error message is not null.").isTrue();
   }
 
   /*
@@ -633,15 +649,15 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 </service>
    */
   protected void assertService(Element xmlServiceRepresentation, ServiceReference<?> serviceRef) {
-    assertNotNull("Service representation ", xmlServiceRepresentation);
+    assertThat(xmlServiceRepresentation).as("Service representation ").isNotNull();
 
     String serviceId = serviceRef.getProperty(Constants.SERVICE_ID).toString();
 
     String idResult = getTextValue(xmlServiceRepresentation, "id");
-    assertNotNull("Id property.", idResult);
+    assertThat(idResult).as("Id property.").isNotNull();
 
     String bundleResult = getTextValue(xmlServiceRepresentation, "bundle");
-    assertEquals("Bundle property.", getBundleURI(serviceRef.getBundle()), bundleResult);
+    assertThat(bundleResult).as("Bundle property.").isEqualTo(getBundleURI(serviceRef.getBundle()));
 
     Bundle[] usingBundles = serviceRef.getUsingBundles();
     NodeList nodes = xmlServiceRepresentation.getElementsByTagName("usingBundles");
@@ -649,24 +665,24 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       HashSet<String> uBundlesSet = new HashSet<String>();
       Element element = (Element)nodes.item(0);
       NodeList bundles = element.getElementsByTagName("bundle");
-      assertNotNull("usingBundles not null.", bundles);
+      assertThat(bundles).as("usingBundles not null.").isNotNull();
       for (int k = 0; k < bundles.getLength(); k++) {
         Element bundle = (Element)bundles.item(k);
         String value = bundle.getFirstChild().getNodeValue();
         uBundlesSet.add(value);
       }
 
-      assertEquals("usingBundles length.", usingBundles.length, uBundlesSet.size());
+      assertThat(uBundlesSet.size()).as("usingBundles length.").isEqualTo(usingBundles.length);
 
       for (int k = 0; k < usingBundles.length; k++) {
-        assertTrue("usingBundle " + usingBundles[k].getBundleId(), uBundlesSet.contains(getBundleURI(usingBundles[k])));
+        assertThat(uBundlesSet.contains(getBundleURI(usingBundles[k]))).as("usingBundle " + usingBundles[k].getBundleId()).isTrue();
       }
     } else {
       if (nodes != null && nodes.getLength() != 0) {
         Element element = (Element)nodes.item(0);
         NodeList bundles = element.getElementsByTagName("bundle");
 
-        assertTrue("usingBundles.", bundles == null || bundles.getLength() == 0);
+        assertThat(bundles == null || bundles.getLength() == 0).as("usingBundles.").isTrue();
       }
     }
 
@@ -678,7 +694,7 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       Element propsElement = (Element)props.item(0);
 
       NodeList propertyNodeList = propsElement.getElementsByTagName("property");
-      assertNotNull("properties not null.", propertyNodeList);
+      assertThat(propertyNodeList).as("properties not null.").isNotNull();
 
       for (int k = 0; k < propertyNodeList.getLength(); k++) {
         Element propertyElement = (Element)propertyNodeList.item(k);
@@ -703,12 +719,12 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 				}
       }
 
-      assertEquals("Properties size.", propKeys.length, xmlProps.size());
+      assertThat(xmlProps.size()).as("Properties size.").isEqualTo(propKeys.length);
       for (String key : propKeys) {
         Object value = serviceRef.getProperty(key);
 
         List<String> propertyList = xmlProps.get(key);
-        assertNotNull("Service property " + key, propertyList);
+        assertThat(propertyList).as("Service property " + key).isNotNull();
 
         if (value.getClass().isArray()) {
           int length = Array.getLength(value);
@@ -717,41 +733,38 @@ public class RestServiceXMLTestCase extends RestTestUtils {
           debug("Property value from xml:" + propertyList, null);
           debug("Property value :" + Arrays.toString((Object[])value), null);
 
-          assertEquals("Service '" + serviceId + "'. Array property '" + key + "' value size.", length, propertyList.size());
+          assertThat(propertyList.size()).as("Service '" + serviceId + "'. Array property '" + key + "' value size.").isEqualTo(length);
 
           for (int k = 0; k < length; k++) {
             Object arrayValue = Array.get(value, k);
-            assertTrue("Service '" + serviceId + "'. Array property '" + key + "' arrayValue:'" + arrayValue + "'.",
-              propertyList.contains(arrayValue.toString()));
+            assertThat(propertyList.contains(arrayValue.toString())).as("Service '" + serviceId + "'. Array property '" + key + "' arrayValue:'" + arrayValue + "'.").isTrue();
           }
 
         } else {
-          assertTrue("Single property value.", propertyList.size() == 1);
+          assertThat(propertyList.size() == 1).as("Single property value.").isTrue();
           if (value instanceof Number) {
-            assertEquals("Service number property " + key, ((Number)value).intValue(),
-              Integer.parseInt(propertyList.get(0)));
+            assertThat(Integer.parseInt(propertyList.get(0))).as("Service number property " + key).isEqualTo(((Number)value).intValue());
           } else {
-            assertEquals("Service property value for " + key, value, propertyList.get(0));
+            assertThat(propertyList.get(0)).as("Service property value for " + key).isEqualTo(value);
           }
         }
       }
     } else {
-      assertTrue("No properties for service '" + serviceId + "'.",
-        props == null || props.getLength() == 0);
+      assertThat(props == null || props.getLength() == 0).as("No properties for service '" + serviceId + "'.").isTrue();
     }
   }
 
   protected void assertExtensions(Element xmlExtensionsList, List<String> extProps /* name, path, name, path*/,
       int expectedExtensionsCount) {
     if (expectedExtensionsCount == 0) {
-      assertTrue("No extensions.", xmlExtensionsList == null || !xmlExtensionsList.hasChildNodes());
+      assertThat(xmlExtensionsList == null || !xmlExtensionsList.hasChildNodes()).as("No extensions.").isTrue();
       return;
     }
 
-    assertNotNull("Extensions are not null.", xmlExtensionsList);
+    assertThat(xmlExtensionsList).as("Extensions are not null.").isNotNull();
 
     NodeList extNodeList = xmlExtensionsList.getElementsByTagName("extension");
-    assertEquals("Extensions size is " + expectedExtensionsCount + ".", expectedExtensionsCount, extNodeList.getLength());
+    assertThat(extNodeList.getLength()).as("Extensions size is " + expectedExtensionsCount + ".").isEqualTo(expectedExtensionsCount);
 
     HashMap<String, String> extensions = new HashMap<String, String>();
     for (int k = 0; k < extNodeList.getLength(); k++) {
@@ -760,8 +773,8 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       String name = getTextValue(extElement, "name");
       String path = getTextValue(extElement, "path");
 
-      assertNotNull("Name is not null.", name);
-      assertNotNull("Path is not null.", path);
+      assertThat(name).as("Name is not null.").isNotNull();
+      assertThat(path).as("Path is not null.").isNotNull();
 
       extensions.put(name, path);
     }
@@ -772,8 +785,8 @@ public class RestServiceXMLTestCase extends RestTestUtils {
 
       String path = extensions.get(expectedName);
 
-      assertTrue("Extensions list contains " + expectedName + ".", path != null);
-      assertEquals("Extension path.", expectedPath, path);
+      assertThat(path != null).as("Extensions list contains " + expectedName + ".").isTrue();
+      assertThat(path).as("Extension path.").isEqualTo(expectedPath);
     }
   }
 
@@ -997,20 +1010,20 @@ public class RestServiceXMLTestCase extends RestTestUtils {
       connection.connect();
 
       int responseCode = connection.getResponseCode();
-      assertEquals("Response code", expectedResponseCode, responseCode);
+      assertThat(responseCode).as("Response code").isEqualTo(expectedResponseCode);
 
       if (responseCode == HttpURLConnection.HTTP_OK) {
         String responseContentType = connection.getContentType();
         debug("Response ContentType:" + responseContentType, null);
         if (expectedContentType != null) {
-          assertTrue("ContentType", (responseContentType != null) && (responseContentType.startsWith(expectedContentType)));
+          assertThat((responseContentType != null) && (responseContentType.startsWith(expectedContentType))).as("ContentType").isTrue();
         }
         in = connection.getInputStream();
       } else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
         String responseContentType = connection.getContentType();
         debug("Response ContentType:" + responseContentType, null);
         if (expectedContentType != null) {
-          assertTrue("ContentType", (responseContentType != null) && (responseContentType.startsWith(expectedContentType)));
+          assertThat((responseContentType != null) && (responseContentType.startsWith(expectedContentType))).as("ContentType").isTrue();
         }
 
         in = connection.getErrorStream();

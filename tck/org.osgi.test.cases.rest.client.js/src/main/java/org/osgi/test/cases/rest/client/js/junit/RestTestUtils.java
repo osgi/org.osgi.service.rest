@@ -23,19 +23,33 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.common.annotation.InjectBundleInstaller;
+import org.osgi.test.common.install.BundleInstaller;
 
-public abstract class RestTestUtils extends OSGiTestCase {
+public abstract class RestTestUtils {
+
+	@InjectBundleContext
+	BundleContext		context;
+
+	@InjectBundleInstaller
+	BundleInstaller		installer;
 
   protected Random random;
 
@@ -105,9 +119,8 @@ public abstract class RestTestUtils extends OSGiTestCase {
   public static String TB11 = "/tb11.jar";
   public static String TB2 = "/tb2.jar";
 
-  @Override
-	protected void setUp() throws Exception {
-    super.setUp();
+	@BeforeEach
+	public void setUp() throws Exception {
 
     baseURI = getProperty("rest.tck.base.uri", "http://localhost:8888/");
     debugOn = getBooleanProperty("rest.tck.debug", true);
@@ -122,9 +135,8 @@ public abstract class RestTestUtils extends OSGiTestCase {
     random = new Random(System.nanoTime());
   }
 
-  @Override
-	protected void tearDown() throws Exception {
-    super.tearDown();
+	@AfterEach
+	public void tearDown() throws Exception {
     //ungetAllServices();
 
     unisntallIfInstalled(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
@@ -193,7 +205,7 @@ public abstract class RestTestUtils extends OSGiTestCase {
   }
 
   protected FrameworkStartLevel getFrameworkStartLevel() {
-    return getContext().getBundle(0).adapt(FrameworkStartLevel.class);
+    return context.getBundle(0).adapt(FrameworkStartLevel.class);
   }
 
   protected BundleStartLevel getBundleStartLevel(Bundle bundle) {
@@ -201,11 +213,11 @@ public abstract class RestTestUtils extends OSGiTestCase {
   }
 
   protected Bundle[] getInstalledBundles() {
-    return getContext().getBundles();
+    return context.getBundles();
   }
 
   protected ServiceReference<?>[] getServices(String filter) throws InvalidSyntaxException {
-    return getContext().getAllServiceReferences(null, filter);
+    return context.getAllServiceReferences(null, filter);
   }
 
   protected Bundle getRandomBundle() {
@@ -255,7 +267,7 @@ public abstract class RestTestUtils extends OSGiTestCase {
   protected Bundle getTestBundle(String symbolicName, String entryName) throws BundleException, IOException {
     Bundle tbBundle = getBundle(symbolicName);
     if (tbBundle == null) {
-      tbBundle = install(entryName);
+      tbBundle = installer.installBundle(entryName, false);
     }
 
     return tbBundle;
@@ -344,4 +356,38 @@ public abstract class RestTestUtils extends OSGiTestCase {
     return connection;
   }
 
+  /**
+   * Copied unchanged from OSGiTestCase of the TCK test support: the property
+   * from the bundle context properties, or the system property.
+   */
+  public String getProperty(String key) {
+    return AccessController.doPrivileged((PrivilegedAction<String>) () -> {
+      if (context != null) {
+        return context.getProperty(key);
+      }
+      return System.getProperty(key);
+    });
+  }
+
+  /**
+   * Copied unchanged from OSGiTestCase of the TCK test support.
+   */
+  public String getProperty(String key, String defaultValue) {
+    String propValue = getProperty(key);
+    if (propValue == null) {
+      return defaultValue;
+    }
+    return propValue;
+  }
+
+  /**
+   * Copied unchanged from OSGiTestCase of the TCK test support.
+   */
+  public boolean getBooleanProperty(String key, boolean defaultValue) {
+    String propValue = getProperty(key);
+    if (propValue == null) {
+      return defaultValue;
+    }
+    return Boolean.valueOf(propValue).booleanValue();
+  }
 }

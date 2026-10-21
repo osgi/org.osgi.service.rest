@@ -17,6 +17,10 @@
  *******************************************************************************/
 package org.osgi.test.cases.rest.client.js.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.osgi.test.assertj.bundle.BundleAssert.assertThat;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -28,6 +32,10 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Map;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.Constants;
@@ -42,6 +50,13 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class RestJSClientTestCase extends RestTestUtils {
+
+	String	testMethodName;
+
+	@BeforeEach
+	void testMethodName(TestInfo testInfo) {
+		testMethodName = testInfo.getTestMethod().get().getName();
+	}
 	private static final int BUFFER_SIZE = 4096 * 16;
 
 	private static final String	SUCCESS	= "success";
@@ -49,11 +64,12 @@ public class RestJSClientTestCase extends RestTestUtils {
 	private String	jsclient;
 	private File				dataArea;
 
-	protected void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() throws Exception {
 		super.setUp();
-		dataArea = getContext().getDataFile("");
+		dataArea = context.getDataFile("");
 
-		tracker = new BundleTracker<String>(getContext(), Bundle.ACTIVE, null) {
+		tracker = new BundleTracker<String>(context, Bundle.ACTIVE, null) {
 			@Override
 			public String addingBundle(Bundle bundle, BundleEvent event) {
 				BundleWiring wiring = bundle.adapt(BundleWiring.class);
@@ -67,12 +83,12 @@ public class RestJSClientTestCase extends RestTestUtils {
 			}
 		};
 		tracker.open();
-		assertEquals("Not exactly one bundle providing javascript client", 1, tracker.size());
+    assertThat(tracker.size()).as("Not exactly one bundle providing javascript client").isOne();
 		Bundle impl = tracker.getBundles()[0];
 		String script = tracker.getObject(impl);
 
 		URL url = impl.getEntry(script);
-		assertNotNull("Can not find resource: " + script, url);
+		assertThat(url).as("Can not find resource: " + script).isNotNull();
 		InputStream in = url.openStream();
 
 		File restJSClient = File.createTempFile("OSGiRestClient-", ".js", dataArea);
@@ -95,12 +111,13 @@ public class RestJSClientTestCase extends RestTestUtils {
 		jsclient = restJSClient.getCanonicalFile().toURI().toURL().toString();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
+	@AfterEach
+	public void tearDown() throws Exception {
 		tracker.close();
 		super.tearDown();
 	}
 
+	@Test
 	public void testFrameworkStartLevelRestClient() throws Exception {
 		int sl = getFrameworkStartLevel().getStartLevel();
 		int ibsl = getFrameworkStartLevel().getInitialBundleStartLevel();
@@ -166,10 +183,11 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "}});");
 	}
 
+	@Test
 	public void testBundleListRestClient() throws Exception {
 		StringBuilder sb = new StringBuilder("[");
 		boolean first = true;
-		for (Bundle b : getContext().getBundles()) {
+		for (Bundle b : context.getBundles()) {
 			if (first)
 				first = false;
 			else
@@ -193,9 +211,8 @@ public class RestJSClientTestCase extends RestTestUtils {
 			// test bundle is already installed => uninstall
 			tb1Bundle.uninstall();
 		}
-		assertNull("Precondition, bundle should not be installed",
-				getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME));
-		String url = getContext().getBundle().getEntry(TB1).toString();
+		assertThat(getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME)).as("Precondition, bundle should not be installed").isNull();
+		String url = context.getBundle().getEntry(TB1).toString();
 
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
 				+ "client.installBundle('" + url + "', {"
@@ -203,7 +220,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    done();"
 				+ "}})");
 		tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
-		assertNotNull("Test bundle TB1 is installed", tb1Bundle);
+		assertThat(tb1Bundle).as("Test bundle TB1 is installed").isNotNull();
 
 		// Make an invalid installation
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
@@ -224,7 +241,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 		// Test getBundles() again with the newly installed bundle
 		StringBuilder sb2 = new StringBuilder("[");
 		boolean first2 = true;
-		for (Bundle b : getContext().getBundles()) {
+		for (Bundle b : context.getBundles()) {
 			if (first2)
 				first2 = false;
 			else
@@ -244,8 +261,9 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "}})");
 	}
 
+	@Test
 	public void testBundleRepresentationsListRestClient() throws Exception {
-		Bundle[] bundles = getContext().getBundles();
+		Bundle[] bundles = context.getBundles();
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("var client = new OSGiRestClient('");
@@ -267,6 +285,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 		jsTest(sb.toString());
 	}
 
+	@Test
 	public void testBundleRestClient() throws Exception {
 		Bundle bundle = getRandomBundle();
 
@@ -294,7 +313,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    done();"
 				+ "}})");
 
-		String url = getContext().getBundle().getEntry(TB11).toString();
+		String url = context.getBundle().getEntry(TB11).toString();
 
 		// update with location
 		Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
@@ -305,11 +324,12 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "}})");
 
 		Bundle tb11Bundle = getBundle(TB11_TEST_BUNDLE_SYMBOLIC_NAME);
-		assertNotNull("Updated bundle not null", tb11Bundle);
-		assertEquals("Updated bundle version", TB11_TEST_BUNDLE_VERSION, tb11Bundle.getVersion().toString());
+		assertThat(tb11Bundle).as("Updated bundle not null").isNotNull();
+		assertThat(tb11Bundle.getVersion().toString()).as("Updated bundle version").isEqualTo(TB11_TEST_BUNDLE_VERSION);
 	}
 
 	
+    @Test
     public void testBundleStateRestClient() throws Exception { 
 	    Bundle bundle = getRandomBundle();
   
@@ -353,14 +373,14 @@ public class RestJSClientTestCase extends RestTestUtils {
 		    tb1Bundle.stop(); 
 	    }
   
-		assertTrue("Precondition", tb1Bundle.getState() != Bundle.ACTIVE);
+		assertThat(tb1Bundle.getState() != Bundle.ACTIVE).as("Precondition").isTrue();
 		// Start by bundle ID
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
 				+ "client.startBundle(" + tb1Bundle.getBundleId() + ", {"
 				+ " success : function(res) {"
 				+ "   done();"
 				+ "}})");
-		assertEquals(Bundle.ACTIVE, tb1Bundle.getState());
+		assertThat(tb1Bundle).isInState(Bundle.ACTIVE);
 
 		// Stop by bundle ID
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
@@ -368,21 +388,21 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ " success : function(res) {"
 				+ "   done();"
 				+ "}})");
-		assertTrue(tb1Bundle.getState() != Bundle.ACTIVE);
+      assertThat(tb1Bundle).isNotInState(Bundle.ACTIVE);
 
 	    Bundle tb2Bundle = getTestBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME, TB2); 
 	    if (tb2Bundle.getState() == Bundle.ACTIVE) { 
 	    	tb2Bundle.stop(); 
 	    }
 
-	    assertTrue("Precondition", tb2Bundle.getState() != Bundle.ACTIVE); 
+	    assertThat(tb2Bundle.getState() != Bundle.ACTIVE).as("Precondition").isTrue(); 
 	    // Start by bundle ID 
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
 				+ "client.startBundle('" + getBundlePath(tb2Bundle) + "',0,{"
 	    		+ "  success : function(res) {" 
 				+ "    done();"
 				+ "}})");
-	    assertEquals(Bundle.ACTIVE, tb2Bundle.getState());
+	    assertThat(tb2Bundle).isInState(Bundle.ACTIVE);
 
 		// Stop by bundle ID
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
@@ -390,7 +410,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "  success : function(res) {"
 				+ "    done();"
 				+ "}})");
-		assertTrue(tb2Bundle.getState() != Bundle.ACTIVE);
+      assertThat(tb2Bundle).isNotInState(Bundle.ACTIVE);
 
 	    // Start nonexisting bundle 
 	    jsTest("var client = new OSGiRestClient('" + baseURI + "');" 
@@ -407,6 +427,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "}})");
 	}
 
+	@Test
 	public void testBundleHeaderRestClient() throws Exception {
 		Bundle bundle = getRandomBundle();
 		Dictionary<String, String> headers = bundle.getHeaders();
@@ -425,6 +446,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 		jsTest(sb.toString());
 	}
 
+	@Test
 	public void testBundleStartLevelRestClient() throws Exception {
 		Bundle bundle = getRandomBundle();
 		BundleStartLevel bsl = getBundleStartLevel(bundle);
@@ -468,7 +490,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    done();"
 				+ "}})");
 		tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
-		assertEquals("New start level ", tb1NewStartLevel, tb1StartLevel);
+		assertThat(tb1StartLevel).as("New start level ").isEqualTo(tb1NewStartLevel);
 
 		int tb1NewStartLevel2 = tb1StartLevel + 2;
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
@@ -478,7 +500,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    done();"
 				+ "}})");
 		tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
-		assertEquals("New start level ", tb1NewStartLevel2, tb1StartLevel);
+		assertThat(tb1StartLevel).as("New start level ").isEqualTo(tb1NewStartLevel2);
 
 		// Set bundle start level for nonexistent ID
 		jsTest("var client = new OSGiRestClient('" + baseURI + "');"
@@ -499,6 +521,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "}})");
 	}
 
+	@Test
 	public void testServiceRestClient() throws Exception {
 		ServiceReference<?> serviceRef = getRandomService();
 		Long sid = (Long) serviceRef.getProperty(Constants.SERVICE_ID);
@@ -517,6 +540,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 		jsTest(sb.toString());
 	}
 
+	@Test
 	public void testServiceRestClient2() throws Exception {
 		ServiceReference<?> serviceRef = getRandomService();
 		Long sid = (Long) serviceRef.getProperty(Constants.SERVICE_ID);
@@ -535,6 +559,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 		jsTest(sb.toString());
 	}
 
+	@Test
 	public void testServices() throws Exception {
 		StringBuilder sb = new StringBuilder("[");
 		boolean first = true;
@@ -558,6 +583,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "  }});");
 	}
 
+	@Test
 	public void testServiceRepresentations() throws Exception {
 		ServiceReference<?>[] srefs = getServices(null);
 
@@ -657,7 +683,7 @@ public class RestJSClientTestCase extends RestTestUtils {
                 + "</body>"
                 + "</html>");
 
-		File f = File.createTempFile(getName(), ".html", dataArea);
+		File f = File.createTempFile(testMethodName, ".html", dataArea);
 
 		try (Writer writer = Files.newBufferedWriter(f.toPath(),
 				StandardCharsets.UTF_8)) {
