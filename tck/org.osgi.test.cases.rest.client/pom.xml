@@ -75,7 +75,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.osgi.tck</groupId>
-			<artifactId>org.osgi.test.support</artifactId>
+			<artifactId>org.osgi.tck.signature</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
@@ -102,6 +102,13 @@
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.framework</artifactId>
 			<version>${org.osgi.framework.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- AssertJ's assertThat(Object) overloads need the DTO type on the compile path -->
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.dto</artifactId>
+			<version>${org.osgi.dto.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
